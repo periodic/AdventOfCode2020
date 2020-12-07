@@ -22,6 +22,11 @@ description:         Please see the README on GitHub at <https://github.com/gith
 dependencies:
 - base >= 4.7 && < 5
 
+ghc-options:
+- -threaded
+- -rtsopts
+- -with-rtsopts=-N
+
 library:
   source-dirs: src
 
@@ -29,18 +34,10 @@ executables:
   Day01:
     main:                Day01.hs
     source-dirs:         Day01
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
 
   Day02:
     main:                Day02.hs
     source-dirs:         Day02
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
       - attoparsec >= 0.13
       - text >= 1.0
@@ -48,10 +45,6 @@ executables:
   Day03:
     main:                Day03.hs
     source-dirs:         Day03
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
       - array >= 0.5
       - ilist >= 0.4
@@ -59,11 +52,11 @@ executables:
   Day04:
     main:                Day04.hs
     source-dirs:         Day04
-    ghc-options:
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
       - attoparsec >= 0.13
       - text >= 1.0
       - lens >= 4.0
+
+  Day05:
+    main:                Day05.hs
+    source-dirs:         Day05
