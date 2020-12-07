@@ -60,3 +60,7 @@ executables:
   Day05:
     main:                Day05.hs
     source-dirs:         Day05
+
+  Day06:
+    main:                Day06.hs
+    source-dirs:         Day06
