@@ -21,6 +21,10 @@ description:         Please see the README on GitHub at <https://github.com/gith
 
 dependencies:
 - base >= 4.7 && < 5
+- attoparsec >= 0.13
+- text >= 1.0
+- containers >= 0.6
+- vector >= 0.12
 
 ghc-options:
 - -threaded
@@ -28,7 +32,7 @@ ghc-options:
 - -with-rtsopts=-N
 
 library:
-  source-dirs: src
+  source-dirs: lib
 
 executables:
   Day01:
@@ -38,9 +42,6 @@ executables:
   Day02:
     main:                Day02.hs
     source-dirs:         Day02
-    dependencies:
-      - attoparsec >= 0.13
-      - text >= 1.0
 
   Day03:
     main:                Day03.hs
@@ -53,8 +54,6 @@ executables:
     main:                Day04.hs
     source-dirs:         Day04
     dependencies:
-      - attoparsec >= 0.13
-      - text >= 1.0
       - lens >= 4.0
 
   Day05:
@@ -68,18 +67,16 @@ executables:
   Day07:
     main:                Day07.hs
     source-dirs:         Day07
-    dependencies:
-      - attoparsec >= 0.13
-      - text >= 1.0
-      - containers >= 0.6
 
   Day08:
     main:                Main.hs
     source-dirs:         Day08
     dependencies:
-      - attoparsec >= 0.13
-      - text >= 1.0
-      - vector >= 0.12
       - mtl >= 2.0
-      - containers >= 0.6
+
+  Day09:
+    main:                Main.hs
+    source-dirs:         Day09
+    dependencies:
+      - AdventOfCode2020
       
