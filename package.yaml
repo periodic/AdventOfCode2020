@@ -80,3 +80,9 @@ executables:
     dependencies:
       - AdventOfCode2020
       
+  Day10:
+    main:                Main.hs
+    source-dirs:         Day10
+    dependencies:
+      - AdventOfCode2020
+      
