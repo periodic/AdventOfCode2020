@@ -85,4 +85,10 @@ executables:
     source-dirs:         Day10
     dependencies:
       - AdventOfCode2020
-      
+
+  Day11:
+    main:                Main.hs
+    source-dirs:         Day11
+    dependencies:
+      - AdventOfCode2020
+      - array >= 0.5
