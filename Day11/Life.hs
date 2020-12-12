@@ -1,18 +1,23 @@
-{-# LANGUAGE RankNTypes #-}
-module Life where
+{-# LANGUAGE NamedFieldPuns #-}
 
-import Control.Monad.ST
+module Life (Grid, makeGrid, numOccupied, simpleRules, losRules, step, runNSteps, runUntilSettled) where
+
 import Data.Array as Array
-import Data.Array.ST
 import Data.Ix
 import Data.List as L
 import Data.Text as T
+import Data.Maybe as Maybe
 
 data Cell
   = Empty
   | Occupied
   | Invalid
-  deriving (Show, Eq)
+  deriving (Eq)
+
+instance Show Cell where
+  show Empty = "L"
+  show Occupied = "#"
+  show Invalid = "."
 
 type Coord = (Int, Int)
 
@@ -39,49 +44,101 @@ makeGrid input =
 newtype Grid = Grid
   { gridToArray :: Array.Array Coord Cell
   }
-  deriving (Show, Eq)
+  deriving (Eq)
 
-stepGrid :: Grid -> Grid
-stepGrid (Grid arr) =
-  let
-    newArray = runSTArray $ thaw arr >>= step
-  in
-    Grid newArray
+instance Show Grid where
+  show (Grid arr) =
+    let indexes = range . Array.bounds $ arr
+        rows = L.groupBy (\a b -> fst a == fst b) indexes
+     in L.intercalate "\n" . L.map (L.concatMap (show . (arr !))) $ rows
 
-step :: forall s. (STArray s Coord Cell -> ST s (STArray s Coord Cell))
-step grid = do
-  bounds <- getBounds grid
-  mapM_ (`updateCell` grid) $ range bounds
-  return grid
+data Rules = Rules
+  { neighborRule :: Coord -> Grid -> [Cell],
+    updateRule :: Int -> Cell -> Cell
+  }
 
-updateCell :: Coord -> forall s. (STArray s Coord Cell -> ST s ())
-updateCell coord grid = do
-  curr <- readArray grid coord
-  ns <- neighbors coord grid
-  let numOccupied = L.length $ L.filter (== Occupied) ns
-  writeArray grid coord $ nextCellValue numOccupied curr
+numOccupied :: Grid -> Int
+numOccupied (Grid arr) =
+  L.length . L.filter (== Occupied) . L.map (arr !) . range . bounds $ arr
 
-neighbors :: Coord -> forall s. (STArray s Coord Cell -> ST s [Cell])
-neighbors (r, c) grid = do
-  bounds <- getBounds grid
-  mapM (readArray grid) . L.filter (inRange bounds) $ neighborCoords
+runUntilSettled :: Rules -> Grid -> Grid
+runUntilSettled rules grid =
+  let nextGrid = step rules grid
+   in if nextGrid == grid
+        then grid
+        else runUntilSettled rules nextGrid
+
+runNSteps :: Rules -> Int -> Grid -> Grid
+runNSteps rules steps =
+  L.head . L.drop steps . iterate (step rules)
+
+step :: Rules -> Grid -> Grid
+step rules grid =
+  let bounds = Array.bounds . gridToArray $ grid
+      indexes = range bounds
+      newValues = L.zip indexes . L.map (updateCell rules grid) $ indexes
+   in Grid $ Array.array bounds newValues
+
+updateCell :: Rules -> Grid -> Coord -> Cell
+updateCell Rules {neighborRule, updateRule} grid coord =
+  let curr = gridToArray grid ! coord
+      neighborCells = neighborRule coord grid
+      numOccupied = L.length $ L.filter (== Occupied) neighborCells
+   in updateRule numOccupied curr
+
+simpleRules =
+  Rules
+    { neighborRule = adjacentCells,
+      updateRule = greaterThan 4
+    }
+
+losRules =
+  Rules
+    { neighborRule = neighborsInSight,
+      updateRule = greaterThan 5
+    }
+
+directions =
+  [ (1, 1),
+    (1, 0),
+    (1, -1),
+    (0, -1),
+    (-1, -1),
+    (-1, 0),
+    (-1, 1),
+    (0, 1)
+  ]
+
+adjacentCells :: Coord -> Grid -> [Cell]
+adjacentCells (r, c) (Grid arr) =
+  let bounds = Array.bounds arr
+   in L.map (arr !) . L.filter (inRange bounds) $ neighborCoords
   where
     neighborCoords =
       L.map
         (\(dr, dc) -> (r + dr, c + dc))
-        [ (1, 1),
-          (1, 0),
-          (1, -1),
-          (0, -1),
-          (-1, -1),
-          (-1, 0),
-          (-1, 1),
-          (0, 1)
-        ]
+        directions
 
-nextCellValue :: Int -> Cell -> Cell
-nextCellValue _ Invalid = Invalid
-nextCellValue n prev
+neighborsInSight :: Coord -> Grid -> [Cell]
+neighborsInSight coord (Grid arr) =
+  Maybe.mapMaybe (findLos coord) directions
+  where
+    bounds = Array.bounds arr
+
+    findLos :: Coord -> (Int, Int) -> Maybe Cell
+    findLos (r, c) d@(dr, dc) =
+      let newCoord = (r + dr, c + dc)
+          newCell = arr ! newCoord
+       in if not . inRange bounds $ newCoord
+            then Nothing
+            else
+              if newCell /= Invalid
+                then Just newCell
+                else findLos newCoord d
+
+greaterThan :: Int -> Int -> Cell -> Cell
+greaterThan _ _ Invalid = Invalid
+greaterThan limit n prev
   | n == 0 = Occupied
-  | n >= 4 = Empty
+  | n >= limit = Empty
   | otherwise = prev
