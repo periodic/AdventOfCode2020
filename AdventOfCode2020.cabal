@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: d94fb5eb8ef1dd73753ba436f45f338e1d186a70a4db4a60a56c62288168dff2
+-- hash: 91a364f90cbca02ce502286337865d51726b7ce39c54cb4e933217154e249edd
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -230,6 +230,22 @@ executable Day12
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day12
+  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      AdventOfCode2020
+    , attoparsec >=0.13
+    , base >=4.7 && <5
+    , containers >=0.6
+    , text >=1.0
+    , vector >=0.12
+  default-language: Haskell2010
+
+executable Day13
+  main-is: Main.hs
+  other-modules:
+      Paths_AdventOfCode2020
+  hs-source-dirs:
+      Day13
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       AdventOfCode2020
