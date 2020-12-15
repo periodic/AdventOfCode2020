@@ -104,3 +104,9 @@ executables:
     source-dirs:         Day13
     dependencies:
       - AdventOfCode2020
+
+  Day14:
+    main:                Main.hs
+    source-dirs:         Day14
+    dependencies:
+      - AdventOfCode2020
