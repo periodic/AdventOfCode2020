@@ -27,9 +27,13 @@ dependencies:
 - vector >= 0.12
 
 ghc-options:
-- -threaded
 - -rtsopts
-- -with-rtsopts=-N
+- -O
+
+default-extensions:
+- OverloadedStrings
+- GeneralizedNewtypeDeriving
+- NamedFieldPuns
 
 library:
   source-dirs: lib
@@ -110,3 +114,10 @@ executables:
     source-dirs:         Day14
     dependencies:
       - AdventOfCode2020
+
+  Day15:
+    main:                Main.hs
+    source-dirs:         Day15
+    dependencies:
+      - AdventOfCode2020
+      - mtl >= 2.0
