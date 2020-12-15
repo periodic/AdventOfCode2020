@@ -1,7 +1,6 @@
 module Main where
 
-import           Control.Monad.State
-import           Data.IntMap         as M
+import           Data.IntMap.Strict  as M
 import           Data.List           as L
 
 newtype Time = Time { untime :: Int }
@@ -11,20 +10,16 @@ newtype History = History { unwrapHistory :: IntMap Time }
   deriving (Show)
 
 data MemoryState = MemoryState
-  { history    :: History
-  , lastNumber :: Int
-  , time       :: Time
+  { history    :: !History
+  , lastNumber :: !Int
+  , time       :: !Time
   } deriving Show
-
-newtype MemoryGame a = MemoryGame {
-  runMemoryGame :: State MemoryState a
-} deriving (Functor, Applicative, Monad, MonadState MemoryState)
 
 initialNumbers :: [Int]
 initialNumbers = [16,1,0,18,12,14,19]
 
-addNumber :: Int -> Time -> History -> History
-addNumber num t =
+rememberNumber :: Int -> Time -> History -> History
+rememberNumber num t =
   History . M.insert num t . unwrapHistory
 
 deltaOf :: Int -> Time -> History -> Time
@@ -39,7 +34,7 @@ sayNext MemoryState{history, lastNumber, time} =
         then untime $ deltaOf lastNumber time history
         else 0
     newTime = time + Time 1
-    newHistory = addNumber lastNumber time history
+    newHistory = rememberNumber lastNumber time history
   in
     MemoryState { history = newHistory, lastNumber = nextNumber, time = newTime }
 
