@@ -48,7 +48,7 @@ startGame numbers =
     MemoryState { history, time, lastNumber }
 
 untilTurn :: Time -> MemoryState -> MemoryState
-untilTurn targetTime state =
+untilTurn targetTime !state =
   if targetTime <= time state
     then state
     else untilTurn targetTime . sayNext $ state
@@ -65,7 +65,7 @@ partTwo = do
   putStr "30,000,000th turn starting with "
   putStr . show $ initialNumbers
   putStr ": "
-  print . lastNumber . untilTurn (Time 30000000) . startGame $ initialNumbers
+  print . lastNumber . untilTurn (Time 3000000) . startGame $ initialNumbers
 
 main :: IO ()
 main = do

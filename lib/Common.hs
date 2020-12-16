@@ -16,7 +16,7 @@ parseInput parser input = do
     let result = P.parseOnly parser input
     case result of 
         Left err -> do
-            putStr "Failed to parse input"
+            putStr "Failed to parse input: "
             putStrLn err
             exitFailure
         Right value ->
