@@ -37,6 +37,7 @@ default-extensions:
 - GeneralizedNewtypeDeriving
 - NamedFieldPuns
 - BangPatterns
+- GADTs
 
 library:
   source-dirs: lib
@@ -128,5 +129,11 @@ executables:
   Day16:
     main:                Main.hs
     source-dirs:         Day16
+    dependencies:
+      - AdventOfCode2020
+
+  Day17:
+    main:                Main.hs
+    source-dirs:         Day17
     dependencies:
       - AdventOfCode2020
