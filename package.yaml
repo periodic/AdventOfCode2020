@@ -25,6 +25,7 @@ dependencies:
 - text >= 1.0
 - containers >= 0.6
 - vector >= 0.12
+- lens >= 4.0
 
 ghc-options:
 - -O
@@ -61,8 +62,6 @@ executables:
   Day04:
     main:                Day04.hs
     source-dirs:         Day04
-    dependencies:
-      - lens >= 4.0
 
   Day05:
     main:                Day05.hs
@@ -150,3 +149,10 @@ executables:
     dependencies:
       - AdventOfCode2020
       - mtl >= 2.0
+
+  Day20:
+    main:                Main.hs
+    source-dirs:         Day20
+    dependencies:
+      - AdventOfCode2020
+      - linear >= 1.21

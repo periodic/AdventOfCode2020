@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: eef986bb21ce28d3f1474c13c1b8eae226bd8f7342e0eb206d71175ed26f34dd
+-- hash: 3ed4de15dcebe47140e498ba76aa19adc2d63c5775d9ba3a9ad14128eb3e2c1f
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -40,6 +40,7 @@ library
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -56,6 +57,7 @@ executable Day01
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -72,6 +74,7 @@ executable Day02
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -90,6 +93,7 @@ executable Day03
     , base >=4.7 && <5
     , containers >=0.6
     , ilist >=0.4
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -123,6 +127,7 @@ executable Day05
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -139,6 +144,7 @@ executable Day06
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -158,6 +164,7 @@ executable Day07
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -177,6 +184,7 @@ executable Day08
       attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , mtl >=2.0
     , text >=1.0
     , vector >=0.12
@@ -195,6 +203,7 @@ executable Day09
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -212,6 +221,7 @@ executable Day10
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -231,6 +241,7 @@ executable Day11
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -251,6 +262,7 @@ executable Day12
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -268,6 +280,7 @@ executable Day13
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -288,6 +301,7 @@ executable Day14
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -305,6 +319,7 @@ executable Day15
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , mtl >=2.0
     , text >=1.0
     , vector >=0.12
@@ -325,6 +340,7 @@ executable Day16
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -344,6 +360,7 @@ executable Day17
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -361,6 +378,7 @@ executable Day18
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -379,7 +397,29 @@ executable Day19
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , lens >=4.0
     , mtl >=2.0
+    , text >=1.0
+    , vector >=0.12
+  default-language: Haskell2010
+
+executable Day20
+  main-is: Main.hs
+  other-modules:
+      BitMap
+      Tile
+      Paths_AdventOfCode2020
+  hs-source-dirs:
+      Day20
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs
+  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  build-depends:
+      AdventOfCode2020
+    , attoparsec >=0.13
+    , base >=4.7 && <5
+    , containers >=0.6
+    , lens >=4.0
+    , linear >=1.21
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
