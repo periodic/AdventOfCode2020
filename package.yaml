@@ -39,6 +39,7 @@ default-extensions:
 - NamedFieldPuns
 - BangPatterns
 - GADTs
+- LambdaCase
 
 library:
   source-dirs: lib
@@ -156,3 +157,9 @@ executables:
     dependencies:
       - AdventOfCode2020
       - linear >= 1.21
+
+  Day21:
+    main:                Main.hs
+    source-dirs:         Day21
+    dependencies:
+      - AdventOfCode2020
