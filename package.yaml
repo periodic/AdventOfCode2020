@@ -163,3 +163,10 @@ executables:
     source-dirs:         Day21
     dependencies:
       - AdventOfCode2020
+
+  Day22:
+    main:                Main.hs
+    source-dirs:         Day22
+    dependencies:
+      - AdventOfCode2020
+      - mtl >= 2.0
