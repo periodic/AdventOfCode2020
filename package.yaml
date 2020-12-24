@@ -176,3 +176,10 @@ executables:
     dependencies:
       - AdventOfCode2020
       - array >= 0.5
+
+  Day24:
+    main:                Main.hs
+    source-dirs:         Day24
+    dependencies:
+      - AdventOfCode2020
+      - linear >= 1.21
