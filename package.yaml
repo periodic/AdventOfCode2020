@@ -170,3 +170,9 @@ executables:
     dependencies:
       - AdventOfCode2020
       - mtl >= 2.0
+
+  Day23:
+    main:                Main.hs
+    source-dirs:         Day23
+    dependencies:
+      - AdventOfCode2020
