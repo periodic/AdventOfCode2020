@@ -30,8 +30,6 @@ dependencies:
 ghc-options:
 - -O
 - -rtsopts
-- -threaded
-- -with-rtsopts=-N
 
 default-extensions:
 - OverloadedStrings
@@ -40,6 +38,7 @@ default-extensions:
 - BangPatterns
 - GADTs
 - LambdaCase
+- RankNTypes
 
 library:
   source-dirs: lib
@@ -176,3 +175,4 @@ executables:
     source-dirs:         Day23
     dependencies:
       - AdventOfCode2020
+      - array >= 0.5

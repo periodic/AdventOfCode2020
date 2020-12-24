@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 11e1917d2f1322b961a56430903ceac666198c4847010f7d78e9cf074a9e568c
+-- hash: 974b0ba3dd1b6f890a491762ebd7dac01aeceab64cc3fdef435a152239e332fa
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -35,8 +35,8 @@ library
       Paths_AdventOfCode2020
   hs-source-dirs:
       lib
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -52,8 +52,8 @@ executable Day01
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day01
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -69,8 +69,8 @@ executable Day02
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day02
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -86,8 +86,8 @@ executable Day03
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day03
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       array >=0.5
     , attoparsec >=0.13
@@ -105,8 +105,8 @@ executable Day04
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day04
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -122,8 +122,8 @@ executable Day05
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day05
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -139,8 +139,8 @@ executable Day06
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day06
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -159,8 +159,8 @@ executable Day07
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day07
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -179,8 +179,8 @@ executable Day08
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day08
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
     , base >=4.7 && <5
@@ -197,8 +197,8 @@ executable Day09
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day09
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -215,8 +215,8 @@ executable Day10
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day10
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -234,8 +234,8 @@ executable Day11
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day11
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , array >=0.5
@@ -256,8 +256,8 @@ executable Day12
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day12
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -274,8 +274,8 @@ executable Day13
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day13
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -295,8 +295,8 @@ executable Day14
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day14
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -313,8 +313,8 @@ executable Day15
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day15
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -334,8 +334,8 @@ executable Day16
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day16
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -354,8 +354,8 @@ executable Day17
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day17
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -372,8 +372,8 @@ executable Day18
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day18
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -391,8 +391,8 @@ executable Day19
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day19
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -412,8 +412,8 @@ executable Day20
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day20
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -431,8 +431,8 @@ executable Day21
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day21
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -449,8 +449,8 @@ executable Day22
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day22
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
     , attoparsec >=0.13
@@ -468,10 +468,11 @@ executable Day23
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day23
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase
-  ghc-options: -O -rtsopts -threaded -with-rtsopts=-N
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
+    , array >=0.5
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6

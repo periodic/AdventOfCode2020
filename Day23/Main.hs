@@ -1,53 +1,67 @@
 module Main where
 
-import Data.IntMap.Strict ((!))
-import qualified Data.IntMap.Strict as Map
+import Data.Array.ST
+import Data.Array.Unboxed
 import Data.Maybe
+import qualified Data.List as L
+import Control.Monad.ST
+import Control.Monad
 
 data Cups = Cups
   { currentCup :: Int,
-    toMap :: Map.IntMap Int
+    toMap :: UArray Int Int
   }
+
+data STCups s = STCups Int (STUArray s Int Int)
 
 instance Show Cups where
   show (Cups curr cupMap) =
-    showFrom curr (Map.size cupMap)
+    let (min, max) = bounds cupMap
+    in showFrom curr (max - min + 1)
     where
       showFrom curr 0 = ""
       showFrom curr n =
-        case Map.lookup curr cupMap of
-          Nothing ->
-            show curr
-          Just next ->
-            show curr ++ showFrom next (n - 1)
+        show curr ++ showFrom (cupMap ! curr) (n - 1)
 
-move :: Cups -> Cups
-move (Cups currCup cupMap) =
-  let oneCupDown = cupMap ! currCup
-      twoCupsDown = cupMap ! oneCupDown
-      threeCupsDown = cupMap ! twoCupsDown
-      fourCupsDown = cupMap ! threeCupsDown
-      findInsertionIndex n
-        | n <= 0 = findInsertionIndex $ Map.size cupMap
+move :: forall s. STCups s -> ST s (STCups s)
+move (STCups currCup cupMap) = do
+  (min, max) <- getBounds cupMap
+  oneCupDown <- readArray cupMap currCup
+  twoCupsDown <- readArray cupMap oneCupDown
+  threeCupsDown <- readArray cupMap twoCupsDown
+  fourCupsDown <- readArray cupMap threeCupsDown
+  let findInsertionIndex n
+        | n <= 0 = findInsertionIndex max
         | otherwise =
           if n `elem` [oneCupDown, twoCupsDown, threeCupsDown]
             then findInsertionIndex (n - 1)
             else n
       insertAfter = findInsertionIndex (currCup - 1)
-      updatedMap =
-        Map.insert insertAfter oneCupDown
-          . Map.insert threeCupsDown (cupMap ! insertAfter)
-          . Map.insert currCup fourCupsDown
-          $ cupMap
-   in Cups fourCupsDown updatedMap
+  afterInsert <- readArray cupMap insertAfter
+  writeArray cupMap currCup fourCupsDown
+  writeArray cupMap insertAfter oneCupDown
+  writeArray cupMap threeCupsDown afterInsert
+  return $ STCups fourCupsDown cupMap 
 
-moveN :: Int -> Cups -> Cups
-moveN n =
-  foldr1 (.) . replicate n $ move
+freezeCups :: forall s. STCups s -> ST s Cups
+freezeCups (STCups currCup cupMap) = do
+  frozenCupMap <- freeze cupMap
+  return $ Cups currCup frozenCupMap
+
+thawCups :: forall s. Cups -> ST s (STCups s)
+thawCups (Cups currCup cupMap) = do
+  mutableCupMap <- thaw cupMap
+  return $ STCups currCup mutableCupMap
+
+moveN :: forall s. Int -> Cups -> Cups
+moveN n cups = runST $ do
+  stCups <- thawCups cups
+  (foldr1 (>=>) . replicate n $ move) stCups
+  freezeCups stCups
 
 fromList :: [Int] -> Cups
 fromList list =
-  Cups (head list) . Map.fromList . zip list . tail . cycle $ list
+  Cups (head list) . listArray (1, length list). map snd . L.sort . zip list . tail . cycle $ list
 
 exampleCups :: Cups
 exampleCups =
