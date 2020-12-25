@@ -183,3 +183,9 @@ executables:
     dependencies:
       - AdventOfCode2020
       - linear >= 1.21
+
+  Day25:
+    main:                Main.hs
+    source-dirs:         Day25
+    dependencies:
+      - AdventOfCode2020
