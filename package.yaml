@@ -60,9 +60,10 @@ executables:
       - AdventOfCode2020
 
   Day03:
-    main:                Day03.hs
+    main:                Main.hs
     source-dirs:         Day03
     dependencies:
+      - AdventOfCode2020
       - array >= 0.5
       - ilist >= 0.4
 

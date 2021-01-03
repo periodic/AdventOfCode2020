@@ -5,6 +5,10 @@ import qualified Data.Array.IArray as Array
 import qualified Data.List as L
 import Data.List.Index (indexed)
 import Data.Maybe (isJust, catMaybes)
+import qualified Data.Text as T
+import Text.Printf
+
+import Exercise
 
 type Index = (Int, Int)
 type Element = Bool
@@ -24,16 +28,12 @@ newtype Terrain = Terrain { getArray :: Array.Array Index Element }
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    contents <- readFile path
+    contents <- T.unpack <$> readInput
     let terrain = makeTerrain contents
-    count_1_1 <- printTrees (1,1) terrain
-    count_1_3 <- printTrees (1,3) terrain
-    count_1_5 <- printTrees (1,5) terrain
-    count_1_7 <- printTrees (1,7) terrain
-    count_2_1 <- printTrees (2,1) terrain
-    let product = count_1_1 * count_1_3 * count_1_5 * count_1_7 * count_2_1
-    putStrLn $ "Tree product: " ++ show product
+    result1 <- runExercise "Part 1" (countTrees (1, 3)) terrain
+    printf "Trees on (1, 3): %d\n" result1
+    result2 <- runExercise "Part 2" (\t -> map (`countTrees` t) [(1,1), (1,5), (1,7), (2,1)]) terrain
+    printf "Tree product: %d\n" . product $ result1 : result2
 
 printTrees :: Index -> Terrain -> IO Int
 printTrees vector terrain = 

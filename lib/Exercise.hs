@@ -1,4 +1,4 @@
-module Exercise (runExercise, parseInput) where
+module Exercise (runExercise, readInput, parseInput) where
 
 import Control.Monad
 import Options.Applicative
@@ -37,11 +37,16 @@ parseArgs :: IO Arguments
 parseArgs =
   execParser argsInfo
 
+readInput :: IO Text
+readInput = do
+  args <- parseArgs
+  Data.Text.IO.readFile . inputFile $ args
+
 parseInput :: Attoparsec.Parser a -> IO a
 parseInput parser = do
   args <- parseArgs
   printf "Parsing input...\n"
-  contents <- Data.Text.IO.readFile . inputFile $ args
+  contents <- readInput
   doParsing args parser contents
 
 runExercise :: String -> (a -> b) -> a -> IO b
