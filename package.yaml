@@ -42,11 +42,16 @@ default-extensions:
 
 library:
   source-dirs: lib
+  dependencies:
+  - optparse-applicative >= 0.15
+  - criterion >= 1.5.7
 
 executables:
   Day01:
-    main:                Day01.hs
+    main:                Main.hs
     source-dirs:         Day01
+    dependencies:
+      - AdventOfCode2020
 
   Day02:
     main:                Day02.hs
