@@ -67,8 +67,10 @@ executables:
       - linear >= 1.21
 
   Day04:
-    main:                Day04.hs
+    main:                Main.hs
     source-dirs:         Day04
+    dependencies:
+      - AdventOfCode2020
 
   Day05:
     main:                Day05.hs

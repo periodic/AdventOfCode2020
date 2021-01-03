@@ -11,7 +11,9 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TextIO
 import qualified Control.Lens.TH as LensTH
 import qualified Control.Lens as Lens
-import System.Environment ( getArgs ) 
+import Text.Printf
+
+import Exercise
 
 data Passport = Passport
     { _birthYear :: Maybe Text
@@ -134,7 +136,6 @@ passportsParser =
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    contents <- TextIO.readFile path
-    let passports = P.parseOnly passportsParser contents
-    print $ length . filter isValidPassport <$> passports
+    passports <- parseInput passportsParser
+    result <- runExercise "Part 1" (length . filter isValidPassport) passports
+    printf "Number of valid passports: %d\n" result
