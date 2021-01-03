@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 1291f1fdb4b4e1faa1c780f9523d4803b7cb890408bcffd5c0d3ff2f03db8e71
+-- hash: f52a48dcbebf7494a8bf53f01282df1ed7788f92343deda2648fc7b6628a6bd6
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -76,7 +76,8 @@ executable Day02
   default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
   ghc-options: -O -rtsopts
   build-depends:
-      attoparsec >=0.13
+      AdventOfCode2020
+    , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
     , lens >=4.0
