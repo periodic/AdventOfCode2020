@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 82ba94523f3929e41b897ef7859173eddf6273eca433396e11559e97b07cfa68
+-- hash: d1249851f891bf77a357def13244aa3def3959c8aa6d16bd433f96bf5eb3016a
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -95,12 +95,11 @@ executable Day03
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
-    , array >=0.5
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
-    , ilist >=0.4
     , lens >=4.0
+    , linear >=1.21
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010

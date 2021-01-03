@@ -58,15 +58,16 @@ runExercise name work input = do
     then do
       benchmark $ whnf work input
       return . work $ input
-    else time "Work" . work $ input
+    else time "Work" work input
 
-time :: String -> a -> IO a
-time name work = do
+time :: String -> (a -> b) -> a -> IO b
+time name work input = do
   start <- getCPUTime 
-  end <- work `seq` getCPUTime
+  let result = work input
+  end <- result `seq` getCPUTime
   let diff = fromIntegral (end - start) / (10 ^ 9) :: Double
   printf "%s took %0.3fms\n" name diff
-  return work
+  return result
 
 doParsing :: Arguments -> Attoparsec.Parser a -> Text -> IO a
 doParsing args parser contents = do

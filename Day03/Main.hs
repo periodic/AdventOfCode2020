@@ -1,80 +1,49 @@
 module Main where
 
-import System.Environment
-import qualified Data.Array.IArray as Array
+import Control.Applicative
+import Data.Attoparsec.Text
+import Data.Functor
 import qualified Data.List as L
-import Data.List.Index (indexed)
-import Data.Maybe (isJust, catMaybes)
-import qualified Data.Text as T
-import Text.Printf
-
+import Data.Maybe (catMaybes, isJust)
+import Data.Vector (Vector)
+import qualified Data.Vector as V
 import Exercise
+import Text.Printf
+import Linear.V2
 
-type Index = (Int, Int)
+type Index = V2 Int
 type Element = Bool
 
-addIndexes :: Index -> Index -> Index
-addIndexes (r1, c1) (r2, c2) =
-    (r1 + r2, c1 + c2)
+newtype Terrain = Terrain {getArray :: Vector (Vector Element)}
+  deriving (Show)
 
-iRow :: Index -> Int
-iRow = fst
+get :: Index -> Terrain -> Maybe Bool
+get (V2 x y) (Terrain array) =
+  let maxCol = V.length . V.head $ array
+      x' =  x `mod` maxCol
+   in do
+        row <- array V.!? y
+        row V.!? x'
 
-iCol :: Index -> Int
-iCol = snd
-
-newtype Terrain = Terrain { getArray :: Array.Array Index Element }
-    deriving Show
+terrainP :: Parser Terrain
+terrainP =
+  Terrain . V.fromList <$> rowP `sepBy` endOfLine
+  where
+    rowP =
+      V.fromList <$> many1 elementP
+    elementP =
+      "#" $> True <|> "." $> False
 
 main :: IO ()
 main = do
-    contents <- T.unpack <$> readInput
-    let terrain = makeTerrain contents
-    result1 <- runExercise "Part 1" (countTrees (1, 3)) terrain
-    printf "Trees on (1, 3): %d\n" result1
-    result2 <- runExercise "Part 2" (\t -> map (`countTrees` t) [(1,1), (1,5), (1,7), (2,1)]) terrain
-    printf "Tree product: %d\n" . product $ result1 : result2
-
-printTrees :: Index -> Terrain -> IO Int
-printTrees vector terrain = 
-    let
-        count = countTrees vector terrain
-    in do
-        putStrLn $ "Trees on " ++ show vector ++ ": " ++ show count
-        return count
+  terrain <- parseInput terrainP
+  result1 <- runExercise "Part 1" (countTrees $ V2 3 1) terrain
+  printf "Trees on (1, 3): %d\n" result1
+  result2 <- runExercise "Part 2" (\t -> product . (result1 :) . map (`countTrees` t) $ [V2 1 1, V2 5 1, V2 7 1, V2 1 2]) terrain
+  printf "Tree product: %d\n" result2
 
 countTrees :: Index -> Terrain -> Int
 countTrees vect terrain =
-    let
-        indexes = L.iterate (addIndexes vect) vect
-        trees = map (`get` terrain) indexes
-    in
-        length . filter id . catMaybes . takeWhile isJust $ trees
-
-
-makeTerrain :: String -> Terrain
-makeTerrain input =
-    let
-        rows = lines input
-        numRows = length rows - 1
-        numCols = (\x -> x - 1) . maximum . map length $ rows
-        lowerBound = (0, 0)
-        upperBound = (numRows, numCols)
-        parsedCells = map (map (== '#')) rows
-        indexedCells =
-            concatMap (\(r, row) -> map (\(c, e) -> ((r, c), e)) row)
-            . indexed
-            . map indexed
-            $ parsedCells
-    in
-        Terrain $ Array.array (lowerBound, upperBound) indexedCells
-
-get :: Index -> Terrain -> Maybe Bool
-get index (Terrain array) =
-    let
-        (_, (maxRow, maxCol)) = Array.bounds array
-        boundedIndex = (iRow index, mod (iCol index) (maxCol + 1))
-    in
-        if iRow index > maxRow
-            then Nothing
-            else Just (array Array.! boundedIndex)
+  let indexes = L.iterate (+ vect) vect
+      trees = map (`get` terrain) indexes
+   in length . filter id . catMaybes . Prelude.takeWhile isJust $ trees

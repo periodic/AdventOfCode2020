@@ -64,8 +64,7 @@ executables:
     source-dirs:         Day03
     dependencies:
       - AdventOfCode2020
-      - array >= 0.5
-      - ilist >= 0.4
+      - linear >= 1.21
 
   Day04:
     main:                Day04.hs
