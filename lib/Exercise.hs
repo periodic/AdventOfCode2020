@@ -7,7 +7,7 @@ import qualified Data.Attoparsec.Text as Attoparsec
 import System.CPUTime
 import Text.Printf
 import Data.Text (Text)
-import Data.Text.IO
+import Data.Text.IO ( readFile )
 import Criterion
 
 -- TODO: Clean up this file.
@@ -46,6 +46,7 @@ parseInput parser = do
 
 runExercise :: String -> (a -> b) -> a -> IO b
 runExercise name work input = do
+  putStrLn . replicate 80 $ '='
   printf "Running %s...\n" name
   args <- parseArgs
   if benchmarking args
