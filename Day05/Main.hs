@@ -1,39 +1,28 @@
 module Main where
 
-import Data.List (sort)
-import System.Environment (getArgs)
-
+import Data.List (sort, find)
 import Exercise
+import Text.Printf
+import qualified Data.Text as T
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    contents <- readFile path
-    let seatIds = map parseSeatId . lines $ contents
-    putStr "Maximum seat ID: "
-    print $ maximum seatIds
-    putStr "Missing seat ID: "
-    print $ findMissingSeat seatIds
+  contents <- readInput
+  seatIds <- runExercise "Parsing" (map parseSeatId . T.lines) contents
+  maximumId <- runExercise "Part 1" maximum seatIds
+  printf "Maximum seat ID: %d\n" maximumId
+  missingId <- runExercise "Part 2" findMissingSeat seatIds
+  printf "Missing seat ID: %s\n" (show missingId)
 
+findMissingSeat :: [Int] -> Maybe Int
+findMissingSeat seatIds =
+    let sortedIds = sort seatIds
+    in (+1) . fst <$> (find (\(a, b) -> a /= b - 1) . zip sortedIds . tail $ sortedIds)
 
-findMissingSeat :: [Int] -> Either Int Int
-findMissingSeat =
-    foldr1 isMissing . map Left . sort
-    where
-        isMissing (Left seatId) (Left prev) =
-            if seatId == prev - 1
-                then Left seatId
-                else Right (seatId + 1)
-        isMissing _ found@(Right _) =
-            found
-        isMissing _ _ =
-            error "How did the list contain a Right?"
-
-
-parseSeatId :: String -> Int
+parseSeatId :: T.Text -> Int
 parseSeatId =
-    foldl addDigit 0
-    where
-        addDigit num 'B' = num * 2 + 1
-        addDigit num 'R' = num * 2 + 1
-        addDigit num  _  = num * 2
+  T.foldl addDigit 0
+  where
+    addDigit num 'B' = num * 2 + 1
+    addDigit num 'R' = num * 2 + 1
+    addDigit num _ = num * 2
