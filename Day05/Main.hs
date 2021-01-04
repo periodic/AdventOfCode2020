@@ -3,6 +3,8 @@ module Main where
 import Data.List (sort)
 import System.Environment (getArgs)
 
+import Exercise
+
 main :: IO ()
 main = do
     [path] <- getArgs
@@ -26,8 +28,6 @@ findMissingSeat =
             found
         isMissing _ _ =
             error "How did the list contain a Right?"
-
-
 
 
 parseSeatId :: String -> Int
