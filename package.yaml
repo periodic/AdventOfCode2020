@@ -79,8 +79,10 @@ executables:
       - AdventOfCode2020
 
   Day06:
-    main:                Day06.hs
+    main:                Main.hs
     source-dirs:         Day06
+    dependencies:
+      - AdventOfCode2020
 
   Day07:
     main:                Day07.hs

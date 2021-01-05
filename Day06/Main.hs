@@ -2,16 +2,20 @@ module Main where
 
 import Data.List
 import System.Environment (getArgs)
+import Data.Text (unpack)
+import Data.Attoparsec.Text
+
+import Exercise
+import Text.Printf
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    contents <- readFile path
-    let groups = groupAnswers . lines $ contents
-    putStr "Sum of unique answers per group: "
-    print . sumOfAnswerCount . uniqueAnswersPerGroup $ groups
-    putStr "Sum of common answers per group: "
-    print . sumOfAnswerCount . commonAnswersPerGroup $ groups
+    contents <- readInput
+    groups <- runExercise "Parsing" (groupAnswers . lines . unpack) contents
+    part1 <- runExercise "Part 1" (sumOfAnswerCount . uniqueAnswersPerGroup) groups
+    printf "Sum of unique answers per group: %d\n" part1
+    part2 <- runExercise "Part 2" (sumOfAnswerCount . commonAnswersPerGroup) groups
+    printf "Sum of common answers per group: %d\n" part2
 
 
 sumOfAnswerCount :: [String] -> Int
