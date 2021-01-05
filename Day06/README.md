@@ -36,3 +36,41 @@ Sum of common answers per group: 3596
 ```
 
 But lets see what we can do with proper sets and parsing!  It would be fun to see how the quick answer and the more through answer compare.
+
+First, I can switch the parsing over and even leave the same type signatures because combinators like `sepBy` produce lists and the main consumer of input is `letter :: Parser Char`.
+
+This was a bit slower.  Not a lot, but certainly more than just splitting strings.
+
+```
+Parsing input...
+benchmarking...
+time                 1.131 ms   (1.124 ms .. 1.142 ms)
+                     1.000 R²   (0.999 R² .. 1.000 R²)
+mean                 1.145 ms   (1.141 ms .. 1.150 ms)
+std dev              14.42 μs   (10.38 μs .. 20.33 μs)
+```
+
+How about if we use sets? Turns out, to no one's surprise, that union and intersection on sets is more efficient than on lists, even with the small lists we have in this exercise.
+
+```
+Running Part 1...
+benchmarking...
+time                 468.4 μs   (466.5 μs .. 471.1 μs)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 469.4 μs   (468.3 μs .. 472.7 μs)
+std dev              6.044 μs   (2.554 μs .. 11.69 μs)
+
+Sum of unique answers per group: 6782
+================================================================================
+Running Part 2...
+benchmarking...
+time                 575.2 μs   (573.1 μs .. 577.6 μs)
+                     1.000 R²   (0.999 R² .. 1.000 R²)
+mean                 577.7 μs   (574.4 μs .. 593.1 μs)
+std dev              19.70 μs   (3.414 μs .. 44.40 μs)
+variance introduced by outliers: 26% (moderately inflated)
+```
+
+In short: Basic string parsing wins, but sets still beat out lists even for small datasets like this one.
+
+A further optimization could be made by noting that the input is just letters, of which there are 26, so we could go further to optimize the set by representing it as a bitmap in an Int.  That might increase the run-time of the parsing, but would reduce the two parts because union/intersection are just bitwise or/and operations.
