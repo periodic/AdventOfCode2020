@@ -22,10 +22,10 @@ instruction =
     <* skipSpace
     <*> instructionArg
 
-program =
+programP =
     makeProgram
     <$> sepBy instruction endOfLine
 
 parseProgram :: Text -> Either String Program
 parseProgram =
-    parseOnly (program <* skipSpace <* endOfInput)
+    parseOnly (programP <* skipSpace <* endOfInput)

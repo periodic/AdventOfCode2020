@@ -7,31 +7,26 @@ import qualified Data.Text.IO as TextIO
 import Program
 import Parser
 import Evaluator
+import Exercise
 
 main :: IO ()
 main = do
-    [path] <- getArgs
-    contents <- TextIO.readFile path
-    case parseProgram contents of
-        Left err -> do
-            putStr "Unable to parse program"
-            putStrLn err
-        Right program -> do
-            putStr "First run: "
-            case runProgram untilLoop $ program of
-                Success state -> do
-                    putStr "Finished"
-                    print $ accumulator state
-                Loop state -> do
-                    putStr "Looped with value "
-                    print $ accumulator state
-            putStr "Finding best mutation: "
-            case findTerminatingMutation program of
-                Just state -> do
-                    putStr "Finished with value "
-                    print $ accumulator state
-                Nothing ->
-                    putStr "No terminating program found."
+    program <- parseInput programP
+    result <- runExercise "Part 1" (runProgram untilLoop) program
+    case result of
+        Success state -> do
+            putStr "Finished"
+            print $ accumulator state
+        Loop state -> do
+            putStr "Looped with value "
+            print $ accumulator state
+    mutationResult <- runExercise "Part 2" findTerminatingMutation program
+    case mutationResult of
+        Just state -> do
+            putStr "Finished with value "
+            print $ accumulator state
+        Nothing ->
+            putStr "No terminating program found."
 
 findTerminatingMutation =
     getFirst

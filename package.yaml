@@ -94,6 +94,7 @@ executables:
     main:                Main.hs
     source-dirs:         Day08
     dependencies:
+      - AdventOfCode2020
       - mtl >= 2.0
 
   Day09:
