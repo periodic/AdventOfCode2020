@@ -36,3 +36,60 @@ std dev              65.12 ns   (43.91 ns .. 104.6 ns)
 
 Total contents for 'shiny gold': 41559
 ```
+
+I feel like these should be a way to make the graph traversal more abstract so it can be shared, but the graph is not really a container, so it resists being made an instance of classes like `Traversible` and `Foldable` because the nature of the two traversals are so different.  It's possible that it can be thought of as a container of edges, but the issue of handling avoiding revisiting nodes in the first one but not the second is a bit awkward.
+
+Regardless, there is a trick that we can use, which is lazily building a map!  It's like free memoization and simplifies the code.  This means that I have to switch to lazy maps to avoid loops, but it is beautiful in its power, which is only possible with laziness.
+
+Finding all the containers was a matter of doing a graph exploration with a queue and looking for everything reachable, but this is a much more direct method of defining how to define what contains what and then letting the system calculate what it needs.  I worry this would not work if the graph were cyclic, while the former solution was.  That's one reason I went with it originally because I wasn't sure.  The resulting function is quite simple:
+
+```haskell
+allContainers :: Bag -> BagGraph -> Set Bag
+allContainers source graph =
+    Map.findWithDefault Set.empty source containers
+    where
+        containers = Map.map (\directContainers -> 
+            Set.unions . Set.insert directContainers . Set.map (\c -> Map.findWithDefault Set.empty c containers) $ directContainers) 
+            (Graph.reverse graph)
+```
+
+It's also not much slower than the original solution.
+
+```
+Running Part 1...
+benchmarking...
+time                 166.0 μs   (165.7 μs .. 166.3 μs)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 166.0 μs   (165.9 μs .. 166.2 μs)
+std dev              447.9 ns   (346.0 ns .. 598.3 ns)
+
+Total containers for 'shiny gold': 151
+```
+
+The same trick can be applied to the other problem as well:
+
+```haskell
+countContents :: Bag -> BagGraph -> Int
+countContents source graph =
+    Map.findWithDefault 0 source bagSizes
+    where
+        bagSizes = Map.map (
+            (+1) . sum . List.map (\(count, bag) -> count * Map.findWithDefault 0 bag bagSizes))
+            (forward graph)
+```
+
+And again, the runtime does not change appreciably.
+
+```
+Running Part 2...
+benchmarking...
+time                 17.45 μs   (17.37 μs .. 17.57 μs)
+                     1.000 R²   (0.999 R² .. 1.000 R²)
+mean                 17.53 μs   (17.43 μs .. 17.77 μs)
+std dev              456.1 ns   (110.9 ns .. 797.7 ns)
+variance introduced by outliers: 28% (moderately inflated)
+```
+
+In the end, I really liked how I was able to utilize the laziness to come up with a very elegant solution.  In many of these exercises I made everything as strict as possible out of fear of performance hits.  That made me blind to places where laziness really is the best solution!
+
+Credit goes to [mstksg](https://github.com/mstksg/advent-of-code-2020/blob/master/reflections-out/day07.md) for the idea.

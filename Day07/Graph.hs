@@ -1,60 +1,50 @@
 module Graph where
 
-import Data.Map.Strict as Map
-import Data.Set as Set
+import Data.Functor
 import Data.List as List
+import Data.Map as Map
 import Data.Maybe as Maybe
-
+import Data.Set as Set
 import Types
 
 type ReverseMap = Map Bag (Set Bag)
 
 data BagGraph = BagGraph
-    { forward :: Map Bag [(Int, Bag)]
-    , reverse :: ReverseMap
-    } deriving (Show)
+  { forward :: Map Bag [(Int, Bag)],
+    reverse :: ReverseMap
+  }
+  deriving (Show)
 
 makeGraphFromRules :: [BagRule] -> BagGraph
 makeGraphFromRules rules =
-    let
-        forwardEntries = Map.fromList $ List.map (\rule -> (container rule, contents rule)) rules
-        reverseEntries = 
-            List.foldr addReverseEntries Map.empty rules
-    in
-        BagGraph forwardEntries reverseEntries
-    where
-        addReverseEntry container =
-            Map.alter (upsertSet container) 
-        upsertSet val (Just set) = Just (Set.insert val set)
-        upsertSet val Nothing    = Just (Set.singleton val)
-        addReverseEntries :: BagRule -> ReverseMap -> ReverseMap
-        addReverseEntries (BagRule container contents) =
-            List.foldr ((.) . addReverseEntry container . snd) id contents
+  let forwardEntries = Map.fromList $ List.map (\rule -> (container rule, contents rule)) rules
+      reverseEntries =
+        List.foldr addReverseEntries Map.empty rules
+   in BagGraph forwardEntries reverseEntries
+  where
+    upsertSet val = Just . maybe (Set.singleton val) (Set.insert val)
+    addReverseEntry container =
+      Map.alter (upsertSet container)
+    addReverseEntries (BagRule container contents) =
+      List.foldr ((.) . addReverseEntry container . snd) id contents
 
 allContainers :: Bag -> BagGraph -> Set Bag
 allContainers source graph =
-    Set.delete source $ explore [source] (Graph.reverse graph) Set.empty
-
-explore :: [Bag] -> ReverseMap -> Set Bag -> Set Bag
-explore []           _     visited = visited
-explore (next:queue) graph visited =
-    if Set.member next visited
-        then explore queue graph visited
-        else
-            let
-                neighbors = maybe [] Set.toList $ Map.lookup next graph
-                newQueue = queue ++ neighbors
-                newVisited = Set.insert next visited
-            in
-                explore newQueue graph newVisited
+  Map.findWithDefault Set.empty source containers
+  where
+    containers =
+      Map.map
+        ( \directContainers ->
+            Set.unions . Set.insert directContainers . Set.map (\c -> Map.findWithDefault Set.empty c containers) $ directContainers
+        )
+        (Graph.reverse graph)
 
 countContents :: Bag -> BagGraph -> Int
 countContents source graph =
-    let
-        contents = Map.findWithDefault [] source (forward graph)
-    in
-        sum . List.map (uncurry countMultipleContents) $ contents
-    where
-        countMultipleContents :: Int -> Bag -> Int
-        countMultipleContents mult bag =
-            mult * (countContents bag graph + 1)
+  Map.findWithDefault 0 source bagSizes
+  where
+    bagSizes =
+      Map.map
+        ( (+ 1) . sum . List.map (\(count, bag) -> count * Map.findWithDefault 0 bag bagSizes)
+        )
+        (forward graph)
