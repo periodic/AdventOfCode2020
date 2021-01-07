@@ -4,16 +4,14 @@ module Evaluator where
 import Prelude hiding (read)
 import Control.Monad.State as S
 import Control.Monad.ST
-import Data.Set as S
+import Data.IntSet as S
 import Data.Vector.Mutable as V
 
 import Program
 
-data ProgramEvalSt
-
 data ProgramState = ProgramState
     { program :: Program
-    , visitedInstructions :: Set Int
+    , visitedInstructions :: IntSet
     , instructionCounter :: Int
     , accumulator :: Int
     }

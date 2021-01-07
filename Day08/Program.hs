@@ -1,6 +1,8 @@
 module Program where
 
-import Data.Vector as V
+import Data.Vector (Vector, (!), (//))
+import qualified Data.Vector as V
+import Data.Maybe (mapMaybe)
 
 data Instruction
     = IncAccum Int
@@ -14,7 +16,7 @@ newtype Program = Program {
 
 makeProgram :: [Instruction] -> Program
 makeProgram =
-    Program . fromList
+    Program . V.fromList
 
 getInstruction :: Int -> Program -> Instruction
 getInstruction index program =
@@ -26,13 +28,13 @@ numInstructions =
 
 mutations :: Program -> [Program]
 mutations program = 
-    V.toList . V.map mutateAt . indexed . instructions $ program
+    mapMaybe mutateAt [1.. (numInstructions program)]
     where
-        mutateAt (index, _) =
+        mutateAt index =
             case getInstruction index program of
                 NoOp val ->
-                    Program $ instructions program // [(index, Jump val)]
+                    Just . Program $ instructions program // [(index, Jump val)]
                 Jump val ->
-                    Program $ instructions program // [(index, NoOp val)]
+                    Just . Program $ instructions program // [(index, NoOp val)]
                 IncAccum _ ->
-                    program
+                    Nothing
