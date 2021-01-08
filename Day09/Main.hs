@@ -7,16 +7,21 @@ import qualified Data.Text as T
 import qualified Data.Text.IO as TextIO
 import Data.Vector (Vector, (!))
 import qualified Data.Vector as V
-import Exercise
+import Exercise (parseInput, runExercise)
 import System.Environment (getArgs)
-import Text.Printf
+import Text.Printf (printf)
 
 main :: IO ()
 main = do
   numbers <- parseInput xmasInput
-  result1 <- runExercise "Part 1" (fmap (`findContiguousSubsetSum` numbers) . findInvalid) numbers
-  printf "Subset summing to invalid value: %s\n" $ show result1
-  printf "Sum of smallest and largest: %s\n" . show $ (+) <$> (V.minimum <$> result1) <*> (V.maximum <$> result1)
+  result1 <- runExercise "Part 1" findInvalid numbers
+  case result1 of
+    Nothing ->
+      putStrLn "No invalid numbers found."
+    Just invalidNumber -> do
+      printf "Invalid number: %d\n" invalidNumber
+      result2 <- runExercise "Part 2" (findContiguousSubsetSum invalidNumber) numbers
+      printf "Sum of smallest and largest: %s\n" . show $ V.minimum result2 + V.maximum result2
 
 xmasInput :: P.Parser (Vector Int)
 xmasInput =
