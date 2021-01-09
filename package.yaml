@@ -39,6 +39,7 @@ default-extensions:
 - GADTs
 - LambdaCase
 - RankNTypes
+- TupleSections
 
 library:
   source-dirs: lib

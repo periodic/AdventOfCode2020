@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 0f49dc6f8efaa5288adab06b70b4e3ab3f42e8f7b8c454c069ab0fa822168671
+-- hash: 24e8839c3ef28dbb33adf6a9c653f604e43972f6194b5e46fbd4425f6e2d5fc9
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -36,7 +36,7 @@ library
       Paths_AdventOfCode2020
   hs-source-dirs:
       lib
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       attoparsec >=0.13
@@ -55,7 +55,7 @@ executable Day01
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day01
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -73,7 +73,7 @@ executable Day02
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day02
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -91,7 +91,7 @@ executable Day03
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day03
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -110,7 +110,7 @@ executable Day04
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day04
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -128,7 +128,7 @@ executable Day05
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day05
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -146,7 +146,7 @@ executable Day06
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day06
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -167,7 +167,7 @@ executable Day07
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day07
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -188,7 +188,7 @@ executable Day08
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day08
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -207,7 +207,7 @@ executable Day09
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day09
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -225,7 +225,7 @@ executable Day10
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day10
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -244,7 +244,7 @@ executable Day11
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day11
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -266,7 +266,7 @@ executable Day12
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day12
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -284,7 +284,7 @@ executable Day13
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day13
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -305,7 +305,7 @@ executable Day14
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day14
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -323,7 +323,7 @@ executable Day15
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day15
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -344,7 +344,7 @@ executable Day16
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day16
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -364,7 +364,7 @@ executable Day17
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day17
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -382,7 +382,7 @@ executable Day18
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day18
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -401,7 +401,7 @@ executable Day19
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day19
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -422,7 +422,7 @@ executable Day20
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day20
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -441,7 +441,7 @@ executable Day21
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day21
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -459,7 +459,7 @@ executable Day22
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day22
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -478,7 +478,7 @@ executable Day23
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day23
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -497,7 +497,7 @@ executable Day24
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day24
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
@@ -516,7 +516,7 @@ executable Day25
       Paths_AdventOfCode2020
   hs-source-dirs:
       Day25
-  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes
+  default-extensions: OverloadedStrings GeneralizedNewtypeDeriving NamedFieldPuns BangPatterns GADTs LambdaCase RankNTypes TupleSections
   ghc-options: -O -rtsopts
   build-depends:
       AdventOfCode2020
