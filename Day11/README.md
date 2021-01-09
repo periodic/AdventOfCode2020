@@ -12,6 +12,41 @@ Ultimately, a fairly simple solution with `Array` and otherwise naive algorithms
 
 There is one major thing that stands out for optimization: updating the data-structure.  I'm intrigued by the idea of representing the grid as a pair of sets. If it were just two states we could do one, but it is three so I need two.  I also plan to use `IntSet` because it is appreciably faster. This means mapping `R²⇒R`, but that is easy with fixed bounds.
 
-Even a quick hack of this method is much faster.  The runtime goes down from above 300ms to under 20ms.
+With a quick hack of this method it's not much faster, less than a 2x speed-up.  It still suffers from all the problems of having to do a lot of lookups and incremental updates of immutable data-structures. There may be some tricks I'm missing or some strictness I'm missing, but I'm not sure it's worth the time compared to...
 
+Let's try using ST! We should be able to use unboxed mutable arrays to greatly reduce the work.  This turned out to be a huge pain, mostly due to the way that the ST monad works with its existential qualifier.  I spent at least half an hour just trying to figure out why `Grid . runSTUArray $ op` didn't work only to discover later that `Grid (runSTUArray op)` does work.  It seems to lose it's existential qualifier in the former case.
+
+Ultimately, I dot the ST version running and it's much faster, by a factor of about 10x.
+
+### Final Benchmark
+
+```
+Parsing input...
+benchmarking...
+time                 25.16 ns   (25.01 ns .. 25.32 ns)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 25.16 ns   (25.08 ns .. 25.32 ns)
+std dev              379.7 ps   (258.6 ps .. 594.8 ps)
+variance introduced by outliers: 19% (moderately inflated)
+
+================================================================================
+Running Part 1...
+benchmarking...
+time                 271.7 μs   (270.4 μs .. 273.8 μs)
+                     0.999 R²   (0.996 R² .. 1.000 R²)
+mean                 275.0 μs   (272.6 μs .. 286.0 μs)
+std dev              14.77 μs   (3.392 μs .. 33.18 μs)
+variance introduced by outliers: 51% (severely inflated)
+
+Number of occupied seats after settling (Adjacent): 37
+================================================================================
+Running Part 2...
+benchmarking...
+time                 436.2 μs   (434.6 μs .. 438.2 μs)
+                     0.999 R²   (0.998 R² .. 1.000 R²)
+mean                 439.6 μs   (437.2 μs .. 444.7 μs)
+std dev              11.84 μs   (4.658 μs .. 22.17 μs)
+variance introduced by outliers: 19% (moderately inflated)
+
+Number of occupied seats after settling (LOS): 26
 ```

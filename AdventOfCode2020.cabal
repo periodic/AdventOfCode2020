@@ -4,7 +4,7 @@ cabal-version: 1.12
 --
 -- see: https://github.com/sol/hpack
 --
--- hash: 24e8839c3ef28dbb33adf6a9c653f604e43972f6194b5e46fbd4425f6e2d5fc9
+-- hash: fba4da020514734b47b0d4424eee6f5c9f27401d5c674e1ed93ea079e8c57dad
 
 name:           AdventOfCode2020
 version:        0.1.0.0
@@ -43,6 +43,7 @@ library
     , base >=4.7 && <5
     , containers >=0.6
     , criterion >=1.5.7
+    , extra >=1.7
     , lens >=4.0
     , optparse-applicative >=0.15
     , text >=1.0
@@ -62,6 +63,7 @@ executable Day01
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -80,6 +82,7 @@ executable Day02
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -98,6 +101,7 @@ executable Day03
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , linear >=1.21
     , text >=1.0
@@ -117,6 +121,7 @@ executable Day04
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -135,6 +140,7 @@ executable Day05
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -153,6 +159,7 @@ executable Day06
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -174,6 +181,7 @@ executable Day07
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -195,6 +203,7 @@ executable Day08
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , mtl >=2.0
     , text >=1.0
@@ -214,6 +223,7 @@ executable Day09
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -232,6 +242,7 @@ executable Day10
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -252,7 +263,9 @@ executable Day11
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
+    , mtl >=2.0
     , text >=1.0
     , vector >=0.12
   default-language: Haskell2010
@@ -273,6 +286,7 @@ executable Day12
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -291,6 +305,7 @@ executable Day13
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -312,6 +327,7 @@ executable Day14
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -330,6 +346,7 @@ executable Day15
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , mtl >=2.0
     , text >=1.0
@@ -351,6 +368,7 @@ executable Day16
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -371,6 +389,7 @@ executable Day17
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -389,6 +408,7 @@ executable Day18
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -408,6 +428,7 @@ executable Day19
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , mtl >=2.0
     , text >=1.0
@@ -429,6 +450,7 @@ executable Day20
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , linear >=1.21
     , text >=1.0
@@ -448,6 +470,7 @@ executable Day21
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -466,6 +489,7 @@ executable Day22
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , mtl >=2.0
     , text >=1.0
@@ -486,6 +510,7 @@ executable Day23
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
@@ -504,6 +529,7 @@ executable Day24
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , linear >=1.21
     , text >=1.0
@@ -523,6 +549,7 @@ executable Day25
     , attoparsec >=0.13
     , base >=4.7 && <5
     , containers >=0.6
+    , extra >=1.7
     , lens >=4.0
     , text >=1.0
     , vector >=0.12
