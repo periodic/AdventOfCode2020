@@ -1,12 +1,12 @@
-{-# LANGUAGE NamedFieldPuns #-}
+module Life where
 
-module Life (Grid, makeGrid, numOccupied, simpleRules, losRules, step, runNSteps, runUntilSettled) where
-
-import Data.Array as Array
+import Data.IntSet (IntSet)
+import qualified Data.IntSet as Set
 import Data.Ix
 import Data.List as L
-import Data.Text as T
 import Data.Maybe as Maybe
+import Data.Text (Text)
+import qualified Data.Text as T
 
 data Cell
   = Empty
@@ -26,40 +26,80 @@ parseCell 'L' = Empty
 parseCell '#' = Occupied
 parseCell _ = Invalid
 
+calculateIndex :: Coord -> Coord -> Int
+calculateIndex size (y, x) =
+  let (height, width) = size
+   in if x >= 0 && x < width && y >= 0 && y < height
+        then y * (width) + x
+        else -1
+
 makeGrid :: Text -> Grid
 makeGrid input =
   let rows = T.lines input
-      numRows = L.length rows - 1
-      numCols = (\x -> x - 1) . L.maximum . L.map T.length $ rows
-      lowerBound = (0, 0)
-      upperBound = (numRows, numCols)
+      maxRows = L.length rows
+      maxCols = L.maximum . L.map T.length $ rows
+      size = (maxRows, maxCols)
       parsedCells = L.map (L.map parseCell . T.unpack) rows
       indexedCells =
-        L.concatMap (\(r, row) -> L.map (\(c, e) -> ((r, c), e)) row)
+        L.concatMap (\(y, row) -> L.map (\(x, e) -> ((y, x), e)) row)
           . L.zip [0 ..]
           . L.map (L.zip [0 ..])
           $ parsedCells
-   in Grid $ Array.array (lowerBound, upperBound) indexedCells
+      occupiedCells = Set.fromList . map (calculateIndex size . fst) . filter ((== Occupied) . snd) $ indexedCells
+      invalidCells = Set.fromList . map (calculateIndex size . fst) . filter ((== Invalid) . snd) $ indexedCells
+   in Grid occupiedCells invalidCells size
 
-newtype Grid = Grid
-  { gridToArray :: Array.Array Coord Cell
+data Grid = Grid
+  { occupiedCells :: !IntSet,
+    invalidCells :: !IntSet,
+    size :: !(Int, Int)
   }
   deriving (Eq)
 
+indexes :: Grid -> [(Int, Int)]
+indexes Grid {size} =
+  let (y, x) = size
+   in range ((0, 0), (y - 1, x - 1))
+
+getCell :: Coord -> Grid -> Cell
+getCell coord Grid {occupiedCells, invalidCells, size} =
+  let index = calculateIndex size coord
+   in if index < 0
+        then Empty
+        else
+          if Set.member index invalidCells
+            then Invalid
+            else
+              if Set.member index occupiedCells
+                then Occupied
+                else Empty
+
+setCell :: Coord -> Cell -> Grid -> Grid
+setCell !coord !cell grid@Grid {occupiedCells, invalidCells, size} =
+  let index = calculateIndex size coord
+   in if index < 0
+        then grid
+        else case cell of
+          Occupied ->
+            Grid (Set.insert index occupiedCells) (Set.delete index invalidCells) size
+          Empty ->
+            Grid (Set.delete index occupiedCells) (Set.delete index invalidCells) size
+          Invalid ->
+            Grid (Set.delete index occupiedCells) (Set.insert index invalidCells) size
+
 instance Show Grid where
-  show (Grid arr) =
-    let indexes = range . Array.bounds $ arr
-        rows = L.groupBy (\a b -> fst a == fst b) indexes
-     in L.intercalate "\n" . L.map (L.concatMap (show . (arr !))) $ rows
+  show grid =
+    let rows = L.groupBy (\a b -> fst a == fst b) . indexes $ grid
+     in L.intercalate "\n" . L.map (L.concatMap (show . (`getCell` grid))) $ rows
 
 data Rules = Rules
-  { neighborRule :: Coord -> Grid -> [Cell],
+  { neighborRule :: Coord -> Grid -> [Coord],
     updateRule :: Int -> Cell -> Cell
   }
 
 numOccupied :: Grid -> Int
-numOccupied (Grid arr) =
-  L.length . L.filter (== Occupied) . L.map (arr !) . range . bounds $ arr
+numOccupied Grid {occupiedCells} =
+  Set.size occupiedCells
 
 runUntilSettled :: Rules -> Grid -> Grid
 runUntilSettled rules grid =
@@ -73,31 +113,39 @@ runNSteps rules steps =
   L.head . L.drop steps . iterate (step rules)
 
 step :: Rules -> Grid -> Grid
-step rules grid =
-  let bounds = Array.bounds . gridToArray $ grid
-      indexes = range bounds
-      newValues = L.zip indexes . L.map (updateCell rules grid) $ indexes
-   in Grid $ Array.array bounds newValues
+step rules !grid =
+  let newGrid = Grid Set.empty (invalidCells grid) (size grid)
+   in foldr (\coord -> updateCell coord (nextValue rules coord grid)) newGrid (indexes grid)
 
-updateCell :: Rules -> Grid -> Coord -> Cell
-updateCell Rules {neighborRule, updateRule} grid coord =
-  let curr = gridToArray grid ! coord
-      neighborCells = neighborRule coord grid
-      numOccupied = L.length $ L.filter (== Occupied) neighborCells
+updateCell :: Coord -> Cell -> Grid -> Grid
+updateCell coord value grid =
+  let curr = getCell coord grid
+   in if curr == Invalid || value == curr
+        then grid
+        else setCell coord value grid
+
+nextValue :: Rules -> Coord -> Grid -> Cell
+nextValue Rules {neighborRule, updateRule} coord grid =
+  let curr = getCell coord grid
+      neighborCells = map (`getCell` grid) $ neighborRule coord grid
+      numOccupied = L.length . L.filter (== Occupied) $ neighborCells
    in updateRule numOccupied curr
 
+simpleRules :: Rules
 simpleRules =
   Rules
     { neighborRule = adjacentCells,
       updateRule = greaterThan 4
     }
 
+losRules :: Rules
 losRules =
   Rules
     { neighborRule = neighborsInSight,
       updateRule = greaterThan 5
     }
 
+directions :: [Coord]
 directions =
   [ (1, 1),
     (1, 0),
@@ -109,32 +157,23 @@ directions =
     (0, 1)
   ]
 
-adjacentCells :: Coord -> Grid -> [Cell]
-adjacentCells (r, c) (Grid arr) =
-  let bounds = Array.bounds arr
-   in L.map (arr !) . L.filter (inRange bounds) $ neighborCoords
-  where
-    neighborCoords =
-      L.map
-        (\(dr, dc) -> (r + dr, c + dc))
-        directions
+adjacentCells :: Coord -> Grid -> [Coord]
+adjacentCells (r, c) _ =
+  L.map
+    (\(dr, dc) -> (r + dr, c + dc))
+    directions
 
-neighborsInSight :: Coord -> Grid -> [Cell]
-neighborsInSight coord (Grid arr) =
-  Maybe.mapMaybe (findLos coord) directions
+neighborsInSight :: Coord -> Grid -> [Coord]
+neighborsInSight coord grid =
+  L.map (findLos coord) directions
   where
-    bounds = Array.bounds arr
-
-    findLos :: Coord -> (Int, Int) -> Maybe Cell
+    findLos :: Coord -> (Int, Int) -> Coord
     findLos (r, c) d@(dr, dc) =
       let newCoord = (r + dr, c + dc)
-          newCell = arr ! newCoord
-       in if not . inRange bounds $ newCoord
-            then Nothing
-            else
-              if newCell /= Invalid
-                then Just newCell
-                else findLos newCoord d
+          newCell = getCell newCoord grid
+       in if newCell /= Invalid
+            then newCoord
+            else findLos newCoord d
 
 greaterThan :: Int -> Int -> Cell -> Cell
 greaterThan _ _ Invalid = Invalid

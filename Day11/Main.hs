@@ -1,10 +1,10 @@
 {-# LANGUAGE OverloadedStrings #-}
 module Main where
 
-import Common
+import Exercise
 import Data.Attoparsec.Text as P
 import qualified Data.Text as T
-
+import Text.Printf
 import Life
 
 testGrid :: Grid
@@ -22,8 +22,8 @@ testGrid = makeGrid . T.intercalate "\n" $
   ]
 
 main = do
-  grid <- loadAndParseInput (makeGrid <$> P.takeText)
-  putStr "Number of occupied seats after settling (Adjacent): "
-  print . numOccupied . runUntilSettled simpleRules $ grid
-  putStr "Number of occupied seats after settling (LOS): "
-  print . numOccupied . runUntilSettled losRules $ grid
+  grid <- parseInput (makeGrid <$> P.takeText)
+  result1 <- runExercise "Part 1" (numOccupied . runUntilSettled simpleRules) grid
+  printf "Number of occupied seats after settling (Adjacent): %d\n" result1
+  result2 <- runExercise "Part 2" (numOccupied . runUntilSettled losRules) grid
+  printf "Number of occupied seats after settling (LOS): %d\n" result2
