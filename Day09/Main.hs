@@ -1,7 +1,6 @@
-{-# LANGUAGE TupleSections #-}
-
 module Main where
 
+import Data.Function
 import qualified Data.Attoparsec.Text as P
 import qualified Data.Text as T
 import qualified Data.Text.IO as TextIO
@@ -10,6 +9,36 @@ import qualified Data.Vector as V
 import Exercise (parseInput, runExercise)
 import System.Environment (getArgs)
 import Text.Printf (printf)
+import qualified Data.IntSet as S
+import qualified Data.IntMap.Strict as M 
+
+newtype MultiSet = MultiSet {
+    toMap :: M.IntMap Int
+}
+
+empty :: MultiSet
+empty =
+    MultiSet M.empty
+
+insert :: Int -> MultiSet -> MultiSet
+insert k =
+    MultiSet . M.alter (Just . maybe 1 (+1)) k . toMap
+
+remove :: Int -> MultiSet -> MultiSet
+remove k =
+    MultiSet . M.update (\n -> if n > 1 then Just (n - 1) else Nothing) k . toMap
+
+member :: Int -> MultiSet -> Bool
+member k =
+    M.member k . toMap
+
+fromList :: [Int] -> MultiSet
+fromList =
+    foldr insert empty
+
+toList :: MultiSet -> [Int]
+toList =
+    M.keys . toMap
 
 main :: IO ()
 main = do
@@ -27,49 +56,32 @@ xmasInput :: P.Parser (Vector Int)
 xmasInput =
   V.fromList <$> P.sepBy P.decimal P.endOfLine
 
-hasSum :: Int -> Vector Int -> Bool
-hasSum target vector =
-  elem target
-    . fmap add
-    . fmap (\(a, b) -> (vector ! a, vector ! b))
-    . pairs
-    . (\x -> [0 .. (x - 1)])
-    . V.length
-    $ vector
-  where
-    add = uncurry (+)
-    pairs :: [a] -> [(a, a)]
-    pairs (x : xs) =
-      (x,) `fmap` xs ++ pairs xs
-    pairs [] =
-      []
-
 findInvalid :: Vector Int -> Maybe Int
-findInvalid vals =
-  findInvalidR 25
-  where
-    findInvalidR index =
-      if index >= V.length vals
-        then Nothing
-        else
-          let prefix = V.slice (index - 25) 25 vals
-              curr = vals ! index
-              valid = hasSum curr prefix
-           in if not valid
-                then Just curr
-                else findInvalidR (index + 1)
+findInvalid values =
+    findInvalidR 25 (fromList . V.toList . V.slice 0 25 $ values)
+    where
+        hasSum target set =
+             foldl (\prev a -> prev || (a + a /= target && (target - a) `member` set)) False . toList $ set
+        findInvalidR index set =
+            if index >= V.length values
+                then Nothing
+                else
+                    let curr = values ! index
+                        valid = hasSum curr set
+                    in if not valid
+                            then Just curr
+                            else findInvalidR (index + 1) (insert curr set & remove (values ! (index - 25)))
+
 
 findContiguousSubsetSum :: Int -> Vector Int -> Vector Int
 findContiguousSubsetSum target values =
-  findSum 0 1
+  findSum 0 1 (values ! 0 + values ! 1)
   where
-    findSum start size =
-      let subset = V.slice start size values
-          subsetSum = V.sum subset
-       in case compare subsetSum target of
-            EQ ->
-              subset
-            LT ->
-              findSum start (size + 1)
-            GT ->
-              findSum (start + 1) (size - 1)
+    findSum start end subsetSum =
+       case compare subsetSum target of
+        EQ ->
+            V.slice start (end - start + 1) values
+        LT ->
+            findSum start (end + 1) (subsetSum + (values ! (end + 1)))
+        GT ->
+            findSum (start + 1) end (subsetSum - (values ! start))
