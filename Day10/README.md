@@ -18,7 +18,7 @@ The second part, the main thing to realize is that you have to memoize as you go
 
 There are a few small optimizations I can make.  For example, in the first part I was filtering twice.  It's possible to do that in one pass, which halves the time required, getting it under a microsecond.
 
-On the second part, I already mentioned that it's possible to squeeze out a little bit more performance by hand-rolling the memoization, but it's a bit more wordy than I think it worth it for only a 2x speed-up.
+There's a lot to take out if we look a little closer at the structure of part 2.  We can see that if we move up the list of joltages we only ever look back by at most three previous ones.  Also, we don't actually care what those joltages actually are, just where they are relative to the current value.  That means we only have to keep track of four values after each iteration, `j`, `c(j)`, `c(j-1)` and `c(j-2)`.  These can just be stored in a tuple and then we can use a quick `foldl` to calculate the result.  This drops the runtime by a factor of 20 compared to the solution using a lazy `Map` and a factor of 10 compared to my original, more efficient memoization.
 
 ### Final Benchmark
 
@@ -44,11 +44,11 @@ ones * threes = 1625
 ================================================================================
 Running Part 2...
 benchmarking...
-time                 10.19 μs   (10.13 μs .. 10.26 μs)
-                     0.999 R²   (0.998 R² .. 1.000 R²)
-mean                 10.23 μs   (10.16 μs .. 10.36 μs)
-std dev              286.9 ns   (93.66 ns .. 484.7 ns)
-variance introduced by outliers: 32% (moderately inflated)
+time                 457.5 ns   (454.1 ns .. 461.9 ns)
+                     1.000 R²   (0.999 R² .. 1.000 R²)
+mean                 454.4 ns   (453.0 ns .. 457.3 ns)
+std dev              6.423 ns   (3.530 ns .. 10.55 ns)
+variance introduced by outliers: 14% (moderately inflated)
 
 total combinations = 3100448333024
 ```

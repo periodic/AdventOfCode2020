@@ -12,7 +12,7 @@ main = do
   result1 <- runExercise "Part 1" (uncurry (*) . count1and3 . differences) sortedJoltages
   putStr "ones * threes = "
   print result1
-  result2 <- runExercise "Part 2" totalCombinations sortedJoltages
+  result2 <- runExercise "Part 2" totalCombinations2 sortedJoltages
   printf "total combinations = %d\n" result2
 
 addFirstAndLast :: [Int] -> [Int]
@@ -36,6 +36,8 @@ count1and3 =
         _ ->
           (ones, threes)
 
+{- This is an elegant but inefficient solution.
+
 totalCombinations :: [Int] -> Int
 totalCombinations sortedJoltages =
   combinations M.! maximum sortedJoltages
@@ -49,3 +51,18 @@ totalCombinations sortedJoltages =
         . M.fromList
         . L.map (,1)
         $ sortedJoltages
+-}
+
+totalCombinations :: [Int] -> Int
+totalCombinations sortedJoltages =
+  let ((x, _, _), _) = foldl nextJ ((1, 0, 0), 0) . tail $ sortedJoltages
+   in x
+  where
+    nextJ ((p1, p2, p3), prevJ) j =
+      case j - prevJ of
+        1 ->
+          ((p1 + p2 + p3, p1, p2), j)
+        2 ->
+          ((p1 + p2, 0, p1), j)
+        3 ->
+          ((p1, 0, 0), j)
