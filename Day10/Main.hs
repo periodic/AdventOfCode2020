@@ -3,23 +3,22 @@ module Main where
 import Data.Attoparsec.Text as P
 import Data.List as L
 import Data.IntMap as M
-import Common
+import Text.Printf
 
+import Exercise
 
 main :: IO ()
 main = do
-    joltages <- loadAndParseInput (P.sepBy P.decimal P.endOfLine)
-    let sortedJoltages = L.sort . (0 :) . (:) (maximum joltages + 3) $ joltages
-    let diffs = differences sortedJoltages
-    let (ones, threes) = count1and3 diffs
-    putStr "# ones = "
-    print ones
-    putStr "# threes = "
-    print threes
+    sortedJoltages <- parseInput (L.sort . addFirstAndLast <$> P.sepBy P.decimal P.endOfLine)
+    result1 <- runExercise "Part 1" (uncurry (*) . count1and3 . differences) sortedJoltages
     putStr "ones * threes = "
-    print (ones * threes)
-    putStr "total combinations = "
-    print . totalCombinations $ sortedJoltages
+    print result1
+    result2 <- runExercise "Part 2" totalCombinations sortedJoltages
+    printf "total combinations = %d\n" result2
+
+addFirstAndLast :: [Int] -> [Int]
+addFirstAndLast joltages =
+    0 : (maximum joltages + 3) : joltages
 
 count1and3 :: [Int] -> (Int, Int)
 count1and3 values =
@@ -31,10 +30,8 @@ count1and3 values =
 
 -- Input should be sorted.
 differences :: [Int] -> [Int]
-differences (a:b:rest) =
-    (b - a) : differences (b:rest)
-differences _ =
-    []
+differences joltages =
+    zipWith (-) (tail joltages) joltages
 
 totalCombinations :: [Int] -> Int
 totalCombinations sortedJoltages =
