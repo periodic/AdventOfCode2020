@@ -4,6 +4,10 @@ import Types
 
 data FerryState = FerryState AbsDirection (Int, Int) (Int, Int)
   deriving (Show)
+
+totalDistance :: FerryState -> Int
+totalDistance (FerryState _ (n, e) _) =
+  abs n + abs e
   
 updatePosition :: (Int, Int) -> FerryState -> FerryState
 updatePosition delta (FerryState facing position waypoint) =
