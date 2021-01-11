@@ -1,44 +1,43 @@
 module Ferry where
 
 import Types
+import Linear.V2
 
-data FerryState = FerryState AbsDirection (Int, Int)
+data FerryState = FerryState AbsDirection (V2 Int)
   deriving (Show)
-  
+
 totalDistance :: FerryState -> Int
-totalDistance (FerryState _ (n, e)) =
+totalDistance (FerryState _ (V2 n e)) =
   abs n + abs e
 
-updatePosition :: (Int, Int) -> FerryState -> FerryState
+updatePosition :: V2 Int -> FerryState -> FerryState
 updatePosition delta (FerryState facing position) =
-  FerryState facing . addVector delta $ position
+  FerryState facing . (+ delta) $ position
 
 executeRotation :: RotationDirection -> Int -> FerryState -> FerryState
 executeRotation direction degrees (FerryState facing position) =
-  let
-    steps = degrees `div` 90
-    relativeSteps =
-      if direction == Clockwise
-        then steps
-        else -steps
-    dirOffset North = 0
-    dirOffset East = 1
-    dirOffset South = 2
-    dirOffset West = 3
-    newDirSteps = (dirOffset facing + relativeSteps) `mod` 4
-    directions = [North, East, South, West]
-  in
-    flip FerryState position . head . drop newDirSteps $ directions
+  let steps = degrees `div` 90
+      relativeSteps =
+        if direction == Clockwise
+          then steps
+          else - steps
+      dirOffset North = 0
+      dirOffset East = 1
+      dirOffset South = 2
+      dirOffset West = 3
+      newDirSteps = (dirOffset facing + relativeSteps) `mod` 4
+      directions = [North, East, South, West]
+   in flip FerryState position . head . drop newDirSteps $ directions
 
 executeAbsMovement :: AbsDirection -> Int -> FerryState -> FerryState
 executeAbsMovement North dist =
-  updatePosition (0, dist)
+  updatePosition $ V2 0 dist
 executeAbsMovement East dist =
-  updatePosition (dist, 0)
+  updatePosition $ V2 dist 0
 executeAbsMovement South dist =
-  updatePosition (0, -dist)
+  updatePosition $ V2 0 (-dist)
 executeAbsMovement West dist =
-  updatePosition (-dist, 0)
+  updatePosition $ V2 (-dist) 0
 
 executeRelMovement :: Int -> FerryState -> FerryState
 executeRelMovement dist ferry@(FerryState facing _) =
@@ -54,4 +53,4 @@ execute (RelativeMovement dist) =
 
 initialState :: FerryState
 initialState =
-  FerryState East (0, 0)
+  FerryState East $ V2 0 0

@@ -124,6 +124,7 @@ executables:
     source-dirs:         Day12
     dependencies:
       - AdventOfCode2020
+      - linear >= 1.21
 
   Day13:
     main:                Main.hs
