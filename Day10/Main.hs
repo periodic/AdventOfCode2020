@@ -12,7 +12,7 @@ main = do
   result1 <- runExercise "Part 1" (uncurry (*) . count1and3 . differences) sortedJoltages
   putStr "ones * threes = "
   print result1
-  result2 <- runExercise "Part 2" totalCombinations sortedJoltages
+  result2 <- runExercise "Part 2" totalCombinations2 sortedJoltages
   printf "total combinations = %d\n" result2
 
 addFirstAndLast :: [Int] -> [Int]
