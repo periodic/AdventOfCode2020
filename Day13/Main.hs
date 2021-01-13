@@ -49,7 +49,7 @@ leastWait startTime busses =
 
 
 {- Goal is to find the least number n such that for all bus (i, m)
- -   m * k + i = n
+ -   m * k - i = n
  - for some positive integer k, where i is the index in the bus list and m is
  - it's number.
  - Notice that we can find times for any pair, then advance the clock by the
@@ -59,12 +59,7 @@ leastWait startTime busses =
 timeOfSequentialDepartures :: [Maybe Integer] -> Integer
 timeOfSequentialDepartures maybeBusses =
   let
-    bussesWithOffsets = foldr (\(maybeBus, i) busses ->
-      case maybeBus of
-        Just bus ->
-          (bus, i) : busses
-        Nothing ->
-          busses) []  $ zip maybeBusses [0..]
+    bussesWithOffsets = catMaybes . zipWith (\i maybeBus -> (, i) <$> maybeBus) [0..] $ maybeBusses
     firstTime = fst . head $ bussesWithOffsets
   in
     fst . foldl timeOfSequentialPair (0, firstTime) . tail $ bussesWithOffsets
@@ -72,7 +67,7 @@ timeOfSequentialDepartures maybeBusses =
 timeOfSequentialPair :: (Integer, Integer) -> (Integer, Integer) -> (Integer, Integer)
 timeOfSequentialPair (t, dt) (b, offset) =
   let
-    newT = head . dropWhile (\t -> (t + offset) `mod` b /= 0) . iterate (+dt) $ t
+    newT = until (\t -> (t + offset) `mod` b == 0) (+dt) t
     newDT = dt * b
   in
     (newT, newDT)
@@ -81,7 +76,7 @@ timeOfSequentialPair (t, dt) (b, offset) =
 
 calculateAndPrintNextBus :: BusInfo -> IO ()
 calculateAndPrintNextBus (BusInfo startTime busses) = do
-  (nextBus, wait) <- runExercise "Part 1" (leastWait startTime . Maybe.catMaybes) busses
+  (nextBus, wait) <- runExercise "Part 1" (leastWait startTime . catMaybes) busses
   putStr "Next bus is "
   putStr $ show nextBus
   putStr " in "
