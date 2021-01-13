@@ -44,43 +44,45 @@ readInput = do
 
 parseInput :: Attoparsec.Parser a -> IO a
 parseInput parser = do
-  args <- parseArgs
   printf "Parsing input...\n"
-  contents <- readInput
-  doParsing args parser contents
-
-runExercise :: String -> (a -> b) -> a -> IO b
-runExercise name work input = do
-  putStrLn . replicate 80 $ '='
-  printf "Running %s...\n" name
   args <- parseArgs
-  if benchmarking args
-    then do
-      benchmark $ whnf work input
-      return . work $ input
-    else time "Work" work input
+  contents <- readInput
+  time "Parsing" (doParsing parser) contents
 
-time :: String -> (a -> b) -> a -> IO b
-time name work input = do
-  start <- getCPUTime 
-  let result = work input
-  end <- result `seq` getCPUTime
-  let diff = fromIntegral (end - start) / (10 ^ 9) :: Double
-  printf "%s took %0.3fms\n" name diff
-  return result
-
-doParsing :: Arguments -> Attoparsec.Parser a -> Text -> IO a
-doParsing args parser contents = do
-  start <- getCPUTime 
+doParsing :: Attoparsec.Parser a -> Text -> IO a
+doParsing parser contents =
   case Attoparsec.parseOnly parser contents of
     Left err -> do
       printf "Failed to parse input: %s\n" err
       exitFailure
-    Right input -> do
-      end <- input `seq` getCPUTime 
-      let diff = fromIntegral (end - start) / (10 ^ 9) :: Double
-      if benchmarking args
-        then benchmark $ whnf (Attoparsec.parseOnly parser) contents
-        else printf "Parsing took %0.3fms\n" diff
+    Right input ->
       return input
-      
+
+runExercise :: String -> (a -> b) -> a -> IO b
+runExercise name work input = do
+  printSeparator
+  printf "Running %s...\n" name
+  time name (return . work) input
+
+printTimeDiff :: Integer -> Integer -> IO ()
+printTimeDiff start end = do
+  let diff = fromIntegral (end - start) / (10 ^ 9) :: Double
+  printf "Work took %0.3fms\n" diff
+
+printSeparator :: IO ()
+printSeparator =
+  putStrLn . replicate 80 $ '='
+
+time :: String -> (a -> IO b) -> a -> IO b
+time name work input = do
+  args <- parseArgs
+  if benchmarking args
+    then do
+      benchmark $ whnfAppIO work input
+      work input
+    else do
+      start <- getCPUTime 
+      result <- work input
+      end <- result `seq` getCPUTime
+      printTimeDiff start end
+      return result

@@ -1,8 +1,6 @@
-{-# LANGUAGE OverloadedStrings #-}
-
 module Main where
 
-import Common
+import Exercise
 import Control.Applicative
 import Data.Attoparsec.Text as P
 import Data.Functor (($>))
@@ -83,7 +81,7 @@ timeOfSequentialPair (t, dt) (b, offset) =
 
 calculateAndPrintNextBus :: BusInfo -> IO ()
 calculateAndPrintNextBus (BusInfo startTime busses) = do
-  let (nextBus, wait) = leastWait startTime $ Maybe.catMaybes busses
+  (nextBus, wait) <- runExercise "Part 1" (leastWait startTime . Maybe.catMaybes) busses
   putStr "Next bus is "
   putStr $ show nextBus
   putStr " in "
@@ -95,7 +93,7 @@ calculateAndPrintNextBus (BusInfo startTime busses) = do
 
 calculateAndPrintSequentialDepartures :: BusInfo -> IO ()
 calculateAndPrintSequentialDepartures (BusInfo _ busses) = do
-  let time = timeOfSequentialDepartures busses
+  time <- runExercise "Part 2" timeOfSequentialDepartures busses
   putStr "First time of sequential departures: "
   print time
 
@@ -105,6 +103,6 @@ calculateAndPrintSequentialDepartures (BusInfo _ busses) = do
 
 main :: IO ()
 main = do
-  busInfo <- loadAndParseInput input
+  busInfo <- parseInput input
   calculateAndPrintNextBus busInfo
   calculateAndPrintSequentialDepartures busInfo
