@@ -1,5 +1,3 @@
-{-# LANGUAGE GeneralisedNewtypeDeriving #-}
-
 module Types where
 
 data MaskValue
