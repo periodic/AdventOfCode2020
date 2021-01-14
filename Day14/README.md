@@ -16,4 +16,39 @@ In part one, we need to change some values to one, change some to zero and leave
 
 Another thing I noticed is that I was using (effectively) `Map Int` over `IntMap` in my zealousness to use a `newtype` wrapper and make memory locations distinct from values.  Switching to `IntMap` reduced runtime by about half, but at the loss of some type-safety in `Eval.hs`.
   
-However, in part 2 there is the matter of floating values which makes calculation more complicated.  
+However, in part 2 there is the matter of floating values which makes calculation more complicated.  I tried doing some tricks in representing sets of memory values, but the intersections and difference got very complicated to the point I wasn't sure it was worth the time.
+
+### Memory counting
+
+One trick I did try was accumulating the memory in a list and then only computing the sum once at the end.  This was about as fast for part 2, but slowed down part 1, so the extra step is probably not worth the complication.
+
+### Final Benchmark
+
+```
+Parsing input...
+benchmarking...
+time                 446.0 μs   (439.0 μs .. 452.9 μs)
+                     0.999 R²   (0.998 R² .. 1.000 R²)
+mean                 440.7 μs   (437.8 μs .. 446.6 μs)
+std dev              13.85 μs   (7.682 μs .. 24.88 μs)
+variance introduced by outliers: 24% (moderately inflated)
+
+================================================================================
+Running Part 1...
+benchmarking...
+time                 141.4 μs   (141.0 μs .. 141.9 μs)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 141.3 μs   (141.1 μs .. 141.6 μs)
+std dev              877.0 ns   (740.7 ns .. 1.002 μs)
+
+Sum of memory on termination (V1): 15514035145260
+================================================================================
+Running Part 2...
+benchmarking...
+time                 25.37 ms   (24.60 ms .. 26.30 ms)
+                     0.995 R²   (0.988 R² .. 0.999 R²)
+mean                 25.81 ms   (25.46 ms .. 26.38 ms)
+std dev              971.4 μs   (627.0 μs .. 1.570 ms)
+
+Sum of memory on termination (V2): 3926790061594
+```

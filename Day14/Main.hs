@@ -26,14 +26,12 @@ main = do
 
 partOne :: Program -> IO ()
 partOne program = do
-  memory <- runExercise "Part 1" (evalProgramV1) program
-  printf "Total used memory: %d\n" $ memorySize memory
+  total <- runExercise "Part 1" (sumMemory . evalProgramV1) program
   -- Result: 15514035145260
-  printf "Sum of memory on termination (V1): %d\n" $ sumMemory memory
+  printf "Sum of memory on termination (V1): %d\n" total
 
 partTwo :: Program -> IO ()
 partTwo program = do
-  memory <- runExercise "Part 2" (evalProgramV2) program
-  printf "Total used memory: %d\n" $ memorySize memory
+  total <- runExercise "Part 2" (sumMemory . evalProgramV2) program
   -- Result: 3926790061594
-  printf "Sum of memory on termination (V2): %d\n" $ sumMemory memory
+  printf "Sum of memory on termination (V2): %d\n" total
