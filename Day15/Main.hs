@@ -1,71 +1,82 @@
 module Main where
 
-import           Data.IntMap.Strict  as M
-import           Data.List           as L
+import Data.IntMap.Strict as M
+import Data.List as L
+import Exercise
+import Text.Printf
+import Data.Array.ST
+import Data.Array
+import Control.Monad.ST
+import Data.Int
+import Control.Monad.State.Strict
+import Control.Monad.Reader
 
-newtype Time = Time { untime :: Int }
-  deriving (Show, Eq, Num, Ord)
-
-newtype History = History { unwrapHistory :: IntMap Time }
-  deriving (Show)
+newtype History s = History {unwrapHistory :: STUArray s Int32 Int32 }
 
 data MemoryState = MemoryState
-  { history    :: !History
-  , lastNumber :: !Int
-  , time       :: !Time
-  } deriving Show
+  { currNumber :: !Int32,
+    currTurn  :: !Int32
+  }
+  deriving (Show)
 
-initialNumbers :: [Int]
-initialNumbers = [16,1,0,18,12,14,19]
+newtype WordGame s a = WordGame {
+  runWordGame :: ReaderT (History s) (StateT MemoryState (ST s)) a
+} deriving (Functor, Applicative, Monad, MonadState MemoryState, MonadReader (History s))
 
-rememberNumber :: Int -> Time -> History -> History
-rememberNumber num t =
-  History . M.insert num t . unwrapHistory
+liftST :: ST s a -> WordGame s a
+liftST = WordGame . lift . lift
 
-deltaOf :: Int -> Time -> History -> Time
-deltaOf num t =
-  maybe (Time num) (t -) . M.lookup num . unwrapHistory
+rememberNumber :: forall s. Int32 -> Int32 -> WordGame s ()
+rememberNumber num t = do
+  history <- ask
+  liftST $ writeArray (unwrapHistory history) num t
 
-sayNext :: MemoryState -> MemoryState
-sayNext MemoryState{history, lastNumber, time} =
-  let
-    nextNumber =
-      if M.member lastNumber (unwrapHistory history)
-        then untime $ deltaOf lastNumber time history
-        else 0
-    newTime = time + Time 1
-    newHistory = rememberNumber lastNumber time history
-  in
-    MemoryState { history = newHistory, lastNumber = nextNumber, time = newTime }
+recallNumber :: forall s. Int32 -> WordGame s Int32
+recallNumber num = do
+  history <- ask
+  liftST $ readArray (unwrapHistory history) num
 
-startGame :: [Int] -> MemoryState
-startGame numbers =
-  let
-    history = History . M.fromList . tail . L.reverse . flip zip (L.map Time [1..]) $ numbers
-    time = Time . L.length $ numbers
-    lastNumber = L.last numbers
-  in
-    MemoryState { history, time, lastNumber }
+sayNext :: forall s. WordGame s ()
+sayNext = do
+  MemoryState{currNumber, currTurn } <- get
+  lastSpoken <- recallNumber currNumber
+  let nextNumber =
+        if lastSpoken >= 0 
+          then currTurn - lastSpoken 
+          else 0
+      newTurn = currTurn  + 1
+  rememberNumber currNumber currTurn
+  put $ MemoryState nextNumber newTurn
 
-untilTurn :: Time -> MemoryState -> MemoryState
-untilTurn targetTime !state =
-  if targetTime <= time state
-    then state
-    else untilTurn targetTime . sayNext $ state
+playGame :: forall s. [Int32] -> Int32 -> MemoryState
+playGame numbers maxInt32 =
+  let prevNumbers = tail . reverse . flip zip [1 ..] $ numbers
+      currTurn = fromIntegral . L.length $ numbers
+      currNumber = L.last numbers
+      state = MemoryState {currTurn , currNumber}
+      turnsLeft = maxInt32 - currTurn 
+      game :: forall s. WordGame s ()
+      game = do
+        forM_ prevNumbers $ uncurry rememberNumber 
+        replicateM_ (fromIntegral turnsLeft) sayNext
+      stActions :: forall s. ST s MemoryState
+      stActions = do
+        history <- History <$> newArray (0,maxInt32) (-1)
+        (runWordGame game `runReaderT` history) `execStateT` state
+  in runST stActions
+
+initialNumbers :: [Int32]
+initialNumbers = [16, 1, 0, 18, 12, 14, 19]
 
 partOne :: IO ()
 partOne = do
-  putStr "2020th turn starting with "
-  putStr . show $ initialNumbers
-  putStr ": "
-  print . lastNumber . untilTurn (Time 2020) . startGame $ initialNumbers
+  result <- runExercise "Part 1" (currNumber . playGame initialNumbers) (2020)
+  printf "2020th turn starting with %s: %d\n" (show initialNumbers) result
 
 partTwo :: IO ()
 partTwo = do
-  putStr "30,000,000th turn starting with "
-  putStr . show $ initialNumbers
-  putStr ": "
-  print . lastNumber . untilTurn (Time 3000000) . startGame $ initialNumbers
+  result <- runExercise "Part 1" (currNumber . playGame initialNumbers) (30000000)
+  printf "30,000,000th turn starting with %s: %d\n" (show initialNumbers) result
 
 main :: IO ()
 main = do
