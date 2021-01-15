@@ -143,7 +143,6 @@ executables:
     source-dirs:         Day15
     dependencies:
       - AdventOfCode2020
-      - array >= 0.5
       - mtl >= 2.0
 
   Day16:
