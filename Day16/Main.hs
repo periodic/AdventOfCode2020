@@ -1,15 +1,16 @@
 module Main where
 
-import Common
+import Exercise
 import Control.Monad
 import qualified Data.List as L
 import Data.Monoid
 import qualified Data.Text as T
 import Input
 import Range
+import Text.Printf
 
 main = do
-  input <- loadAndParseInput Input.input
+  input <- parseInput Input.input
   partOne input
   partTwo input
 
@@ -28,9 +29,8 @@ extractInvalidValues input@Input {fieldRules, nearbyTickets} =
 
 partOne :: Input -> IO ()
 partOne input = do
-  let invalidValues = extractInvalidValues input
-  putStr "Ticket scanning error rate: "
-  print . sum $ invalidValues
+  errorRate <- runExercise "Part 1" (sum . extractInvalidValues) input
+  printf "Ticket scanning error rate: %d\n" errorRate
 
 ----------------------------------------
 -- Part Two
@@ -67,8 +67,8 @@ solveConstraints options =
         let subSolution = solveConstraints filteredOptions
         return $ ((restrictedKey, value) :) <$> subSolution
 
-partTwo :: Input -> IO ()
-partTwo input =
+solveAndExtract :: Input -> Maybe Int
+solveAndExtract input =
   let fields = validTicketsByField input
       rules = fieldRules input
       rulesWithMatchingFields =
@@ -76,15 +76,18 @@ partTwo input =
       solved = solveConstraints rulesWithMatchingFields
    in case solved of
         Nothing ->
-          print "could not find valid solution"
+          Nothing
         Just fieldAssignments ->
           let yourValues = fieldValues . yourTicket $ input
               departureFields = map snd . filter (("departure" `T.isPrefixOf`) . fieldName . fst) $ fieldAssignments
               productOfDepartureFields = product . map (yourValues !!) $ departureFields
-           in do
-                forM_ fieldAssignments $ \(rule, fields) -> do
-                  putStr (show $ fieldName rule)
-                  putStr ": "
-                  print fields
-                putStr "Product of departure fields: "
-                print productOfDepartureFields
+           in Just productOfDepartureFields
+
+partTwo :: Input -> IO ()
+partTwo input = do
+  productOfDepartureFields <- runExercise "Part 2" solveAndExtract input
+  case productOfDepartureFields of
+    Just value ->
+      printf "Product of departure fields: %d\n" value
+    Nothing ->
+      putStrLn "Unable to solve constraints"
