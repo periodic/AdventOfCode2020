@@ -8,6 +8,9 @@ import qualified Data.Text as T
 import Input
 import Range
 import Text.Printf
+import qualified Data.Set as Set
+import qualified Data.Map.Strict as Map
+import qualified Constraints
 
 main = do
   input <- parseInput Input.input
@@ -36,18 +39,17 @@ partOne input = do
 -- Part Two
 ----------------------------------------
 
-isValid :: Input -> Ticket -> Bool
-isValid input Ticket {fieldValues} =
-  let universalRange = combineRuleRanges input
-   in all (`inRange` universalRange) fieldValues
-
 validTicketsByField :: Input -> [(Int, [Int])]
 validTicketsByField input =
+  let universalRange = simplifyRange $ combineRuleRanges input
+      isValid Ticket{fieldValues} =
+        all (`inRange` universalRange) fieldValues
+  in
   zip [0 ..]
     . L.transpose
     . (fieldValues (yourTicket input) :)
     . map fieldValues
-    . filter (isValid input)
+    . filter isValid
     . nearbyTickets
     $ input
 
@@ -72,14 +74,14 @@ solveAndExtract input =
   let fields = validTicketsByField input
       rules = fieldRules input
       rulesWithMatchingFields =
-        map (\rule -> (rule, fieldsMatchingRule fields rule)) rules
-      solved = solveConstraints rulesWithMatchingFields
+        Map.fromList $ map (\rule -> (fieldName rule, Set.fromList $ fieldsMatchingRule fields rule)) rules
+      solved = Constraints.solve rulesWithMatchingFields
    in case solved of
         Nothing ->
           Nothing
         Just fieldAssignments ->
           let yourValues = fieldValues . yourTicket $ input
-              departureFields = map snd . filter (("departure" `T.isPrefixOf`) . fieldName . fst) $ fieldAssignments
+              departureFields = map snd . filter (("departure" `T.isPrefixOf`) . fst) . Map.toList $ fieldAssignments
               productOfDepartureFields = product . map (yourValues !!) $ departureFields
            in Just productOfDepartureFields
 
