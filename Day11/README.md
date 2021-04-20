@@ -16,7 +16,7 @@ With a quick hack of this method it's not much faster, less than a 2x speed-up. 
 
 Let's try using ST! We should be able to use unboxed mutable arrays to greatly reduce the work.  This turned out to be a huge pain, mostly due to the way that the ST monad works with its existential qualifier.  I spent at least half an hour just trying to figure out why `Grid . runSTUArray $ op` didn't work only to discover later that `Grid (runSTUArray op)` does work.  It seems to lose it's existential qualifier in the former case.
 
-Ultimately, I dot the ST version running and it's much faster, by a factor of about 10x.
+Ultimately, I got the ST version running and it's much faster, by a factor of about 10x.
 
 ### Final Benchmark
 
