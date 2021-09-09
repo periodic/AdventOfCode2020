@@ -13,6 +13,11 @@ newtype Conway v = Conway {
   toSet :: S.Set v
 } deriving Show
 
+fromList :: Ord v => [v] -> Conway v
+fromList =
+  Conway . S.fromList
+
+
 showV3 conway =
   let
     (Vector3 xl yl zl, Vector3 xu yu zu) = bounds conway
