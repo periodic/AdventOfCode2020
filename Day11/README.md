@@ -16,37 +16,37 @@ With a quick hack of this method it's not much faster, less than a 2x speed-up. 
 
 Let's try using ST! We should be able to use unboxed mutable arrays to greatly reduce the work.  This turned out to be a huge pain, mostly due to the way that the ST monad works with its existential qualifier.  I spent at least half an hour just trying to figure out why `Grid . runSTUArray $ op` didn't work only to discover later that `Grid (runSTUArray op)` does work.  It seems to lose it's existential qualifier in the former case.
 
-Ultimately, I dot the ST version running and it's much faster, by a factor of about 10x.
+Ultimately, I got the ST version running and it's much faster, by a factor of about 10x.
 
 ### Final Benchmark
 
 ```
 Parsing input...
 benchmarking...
-time                 25.16 ns   (25.01 ns .. 25.32 ns)
-                     1.000 R²   (1.000 R² .. 1.000 R²)
-mean                 25.16 ns   (25.08 ns .. 25.32 ns)
-std dev              379.7 ps   (258.6 ps .. 594.8 ps)
-variance introduced by outliers: 19% (moderately inflated)
+time                 264.2 μs   (261.3 μs .. 267.6 μs)
+                     0.999 R²   (0.998 R² .. 0.999 R²)
+mean                 269.8 μs   (267.4 μs .. 272.1 μs)
+std dev              7.975 μs   (6.753 μs .. 9.312 μs)
+variance introduced by outliers: 24% (moderately inflated)
 
 ================================================================================
 Running Part 1...
 benchmarking...
-time                 271.7 μs   (270.4 μs .. 273.8 μs)
-                     0.999 R²   (0.996 R² .. 1.000 R²)
-mean                 275.0 μs   (272.6 μs .. 286.0 μs)
-std dev              14.77 μs   (3.392 μs .. 33.18 μs)
-variance introduced by outliers: 51% (severely inflated)
+time                 337.2 ms   (334.7 ms .. 339.9 ms)
+                     1.000 R²   (1.000 R² .. 1.000 R²)
+mean                 341.5 ms   (339.4 ms .. 343.4 ms)
+std dev              2.482 ms   (1.168 ms .. 3.108 ms)
+variance introduced by outliers: 19% (moderately inflated)
 
-Number of occupied seats after settling (Adjacent): 37
+Number of occupied seats after settling (Adjacent): 2470
 ================================================================================
 Running Part 2...
 benchmarking...
-time                 436.2 μs   (434.6 μs .. 438.2 μs)
-                     0.999 R²   (0.998 R² .. 1.000 R²)
-mean                 439.6 μs   (437.2 μs .. 444.7 μs)
-std dev              11.84 μs   (4.658 μs .. 22.17 μs)
+time                 430.0 ms   (398.4 ms .. 460.5 ms)
+                     0.999 R²   (0.997 R² .. 1.000 R²)
+mean                 449.4 ms   (439.4 ms .. 459.1 ms)
+std dev              11.40 ms   (9.801 ms .. 11.80 ms)
 variance introduced by outliers: 19% (moderately inflated)
 
-Number of occupied seats after settling (LOS): 26
+Number of occupied seats after settling (LOS): 2259
 ```
